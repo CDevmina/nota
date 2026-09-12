@@ -1,0 +1,30 @@
+# Local development database only. Railway provisions its own Postgres and
+# supplies DATABASE_URL; nothing here is used in production.
+#
+#   docker compose up -d      start
+#   docker compose down       stop, keeping data
+#   docker compose down -v    stop and wipe the database
+#
+# Credentials match apps/cms/.env.example so a fresh clone works unchanged.
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: nota-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: nota
+      POSTGRES_PASSWORD: nota
+      POSTGRES_DB: nota
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nota -d nota"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  pgdata:
