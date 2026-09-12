@@ -155,11 +155,50 @@ reference at 1440 / 1024 / 768 / 390, its interaction works both scrolling down
 and back up, it degrades sanely with reduced motion, and nothing in it is
 hardcoded.
 
+## Git workflow
+
+**Never commit directly to `main`.** Every change lands through a branch, even
+a one-line fix. `main` stays deployable at all times because Railway builds
+from it — a broken commit on `main` is a broken live site, and they review the
+last deployment before the deadline.
+
+Branch names are `<type>/<short-kebab-summary>`, using the same types as the
+commit prefixes: `feat/`, `fix/`, `chore/`, `docs/`, `refactor/`. One concern
+per branch — `feat/colourway-section`, not `feat/tuesday-work`.
+
+The loop:
+
+```bash
+git checkout main && git pull
+git checkout -b feat/colourway-section
+# ... work, committing as you go ...
+git push -u origin feat/colourway-section
+gh pr create --fill                  # opens the PR
+gh pr merge --merge --delete-branch  # merge commit, not squash
+```
+
+Merge with a **merge commit** (`--no-ff` locally, `--merge` via `gh`), never
+squash or rebase-merge. The branch topology is the record of how the build was
+sequenced, and that is worth more to a reviewer than a flat line of commits.
+Delete the branch after merging.
+
+Rules that don't bend: never force-push `main`, never commit `.env` or
+`node_modules`, and never merge a branch whose `npm run build` fails in either
+app. If a branch turns out to be a dead end, delete it rather than merging it
+half-finished.
+
+Self-merging your own PRs is fine here — it is a solo repo, and the PR exists
+for the paper trail and the diff, not for approval.
+
 ## Commit style
 
 Conventional-ish, present tense, scoped: `feat(web): add colourway camera`,
 `feat(cms): add colorway component`, `chore(railway): add uploads volume`.
 Commit often — they review the last commit before the deadline.
+
+Write the body for someone reading it cold in six months: what changed and
+*why*, not a restatement of the diff. Skip the body only when the subject line
+genuinely says everything.
 
 ## Things that will lose marks
 
