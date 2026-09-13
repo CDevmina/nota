@@ -1,0 +1,44 @@
+{
+  "collectionName": "components_shared_order_modals",
+  "info": {
+    "displayName": "Order Modal",
+    "icon": "envelop",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "emailPlaceholder": {
+      "type": "string",
+      "required": true,
+      "default": "E-mail"
+    },
+    "submitLabel": {
+      "type": "string",
+      "required": true
+    },
+    "closeLabel": {
+      "type": "string",
+      "required": true,
+      "default": "Close"
+    },
+    "successMessage": {
+      "type": "string",
+      "required": true
+    },
+    "errorMessage": {
+      "type": "string",
+      "required": true
+    },
+    "requiredMessage": {
+      "type": "string",
+      "required": true
+    }
+  }
+}

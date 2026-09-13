@@ -1,0 +1,29 @@
+{
+  "collectionName": "components_sections_heros",
+  "info": {
+    "displayName": "Hero",
+    "icon": "picture",
+    "description": "Full-bleed pen render with a two-line display headline."
+  },
+  "options": {},
+  "attributes": {
+    "anchorId": {
+      "type": "string",
+      "regex": "^[a-z0-9-]*$",
+      "description": "Rendered as the section's HTML id. Nav links point at #<anchorId>."
+    },
+    "headlineTop": {
+      "type": "string",
+      "required": true
+    },
+    "headlineBottom": {
+      "type": "string",
+      "required": true
+    },
+    "media": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.media"
+    }
+  }
+}

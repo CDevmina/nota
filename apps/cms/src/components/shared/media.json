@@ -1,0 +1,55 @@
+{
+  "collectionName": "components_shared_medias",
+  "info": {
+    "displayName": "Media",
+    "icon": "picture",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ],
+      "required": true
+    },
+    "alt": {
+      "type": "string",
+      "required": true,
+      "description": "Describe the image for screen readers."
+    },
+    "mobileImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ],
+      "description": "Optional art-directed crop below 992px. The reference art-directs rather than scales."
+    },
+    "video": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "videos"
+      ],
+      "description": "Optional. Scroll-scrubbed or ambient clip shown instead of the image."
+    },
+    "mobileVideo": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "videos"
+      ]
+    },
+    "poster": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ],
+      "description": "First frame, shown while the video loads."
+    }
+  }
+}

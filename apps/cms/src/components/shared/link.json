@@ -1,0 +1,24 @@
+{
+  "collectionName": "components_shared_links",
+  "info": {
+    "displayName": "Link",
+    "icon": "link",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "label": {
+      "type": "string",
+      "required": true
+    },
+    "href": {
+      "type": "string",
+      "required": true,
+      "description": "In-page anchor (#specifications) or absolute URL."
+    },
+    "isExternal": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

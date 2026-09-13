@@ -1,0 +1,34 @@
+{
+  "collectionName": "components_sections_specifications",
+  "info": {
+    "displayName": "Specifications",
+    "icon": "layer",
+    "description": "Split heading, rising nib render, and cards that expand into lists."
+  },
+  "options": {},
+  "attributes": {
+    "anchorId": {
+      "type": "string",
+      "regex": "^[a-z0-9-]*$",
+      "description": "Rendered as the section's HTML id. Nav links point at #<anchorId>."
+    },
+    "eyebrow": {
+      "type": "string",
+      "description": "Muted top line of the split heading, e.g. 'Nota pen'."
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "media": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.media"
+    },
+    "groups": {
+      "type": "component",
+      "repeatable": true,
+      "component": "spec.group"
+    }
+  }
+}

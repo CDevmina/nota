@@ -1,0 +1,33 @@
+{
+  "collectionName": "components_sections_preloaders",
+  "info": {
+    "displayName": "Preloader",
+    "icon": "clock",
+    "description": "Full-screen 0\u2013100 counter that lifts to reveal the hero."
+  },
+  "options": {},
+  "attributes": {
+    "anchorId": {
+      "type": "string",
+      "regex": "^[a-z0-9-]*$",
+      "description": "Rendered as the section's HTML id. Nav links point at #<anchorId>."
+    },
+    "brandMark": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "durationMs": {
+      "type": "integer",
+      "default": 1400,
+      "min": 0,
+      "description": "Counter run time. The reference uses 1400ms, easeInOutQuart."
+    },
+    "suffix": {
+      "type": "string",
+      "default": "%"
+    }
+  }
+}

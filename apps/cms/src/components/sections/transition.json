@@ -1,0 +1,38 @@
+{
+  "collectionName": "components_sections_transitions",
+  "info": {
+    "displayName": "Transition Heading",
+    "icon": "typhoon",
+    "description": "Oversized two-tone serif heading spanning the viewport."
+  },
+  "options": {},
+  "attributes": {
+    "anchorId": {
+      "type": "string",
+      "regex": "^[a-z0-9-]*$",
+      "description": "Rendered as the section's HTML id. Nav links point at #<anchorId>."
+    },
+    "lineTop": {
+      "type": "string",
+      "required": true
+    },
+    "lineBottom": {
+      "type": "string",
+      "required": true
+    },
+    "mutedColor": {
+      "type": "string",
+      "regex": "^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$",
+      "default": "#666666",
+      "description": "#666666 on the reference, except 'Inside' which is #999999."
+    },
+    "theme": {
+      "type": "enumeration",
+      "enum": [
+        "light",
+        "dark"
+      ],
+      "default": "light"
+    }
+  }
+}

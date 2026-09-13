@@ -1,0 +1,30 @@
+{
+  "collectionName": "components_sections_audiences",
+  "info": {
+    "displayName": "Audience",
+    "icon": "user",
+    "description": "Who it's for \u2014 intro paragraphs then staggered audience blocks."
+  },
+  "options": {},
+  "attributes": {
+    "anchorId": {
+      "type": "string",
+      "regex": "^[a-z0-9-]*$",
+      "description": "Rendered as the section's HTML id. Nav links point at #<anchorId>."
+    },
+    "label": {
+      "type": "string",
+      "description": "Small caps label, e.g. \"WHO IT'S FOR:\""
+    },
+    "intro": {
+      "type": "component",
+      "repeatable": true,
+      "component": "audience.intro"
+    },
+    "items": {
+      "type": "component",
+      "repeatable": true,
+      "component": "audience.item"
+    }
+  }
+}

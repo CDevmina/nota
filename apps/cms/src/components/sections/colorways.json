@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_sections_colorways",
+  "info": {
+    "displayName": "Colourways",
+    "icon": "paint",
+    "description": "Sticky-camera morph between colourway states."
+  },
+  "options": {},
+  "attributes": {
+    "anchorId": {
+      "type": "string",
+      "regex": "^[a-z0-9-]*$",
+      "description": "Rendered as the section's HTML id. Nav links point at #<anchorId>."
+    },
+    "items": {
+      "type": "component",
+      "repeatable": true,
+      "component": "colorway.item"
+    }
+  }
+}

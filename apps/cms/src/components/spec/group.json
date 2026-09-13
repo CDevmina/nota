@@ -1,0 +1,20 @@
+{
+  "collectionName": "components_spec_groups",
+  "info": {
+    "displayName": "Spec Group",
+    "icon": "layer",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "items": {
+      "type": "component",
+      "repeatable": true,
+      "component": "spec.item"
+    }
+  }
+}

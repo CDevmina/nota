@@ -1,0 +1,44 @@
+{
+  "collectionName": "components_colorway_items",
+  "info": {
+    "displayName": "Colourway",
+    "icon": "paint",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true,
+      "description": "Left half of the headline, e.g. 'Graphite Black.'"
+    },
+    "tagline": {
+      "type": "string",
+      "required": true,
+      "description": "Right half, e.g. 'Clarity in silence.'"
+    },
+    "gradientStart": {
+      "type": "string",
+      "required": true,
+      "regex": "^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$",
+      "default": "#000000"
+    },
+    "gradientEnd": {
+      "type": "string",
+      "required": true,
+      "regex": "^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$",
+      "default": "#ffffff"
+    },
+    "textColor": {
+      "type": "string",
+      "required": true,
+      "regex": "^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$",
+      "default": "#ffffff"
+    },
+    "media": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.media"
+    }
+  }
+}

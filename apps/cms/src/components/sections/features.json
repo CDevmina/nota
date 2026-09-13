@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_sections_features",
+  "info": {
+    "displayName": "Feature Carousel",
+    "icon": "slideshow",
+    "description": "Sticky-camera carousel with a segmented progress bar."
+  },
+  "options": {},
+  "attributes": {
+    "anchorId": {
+      "type": "string",
+      "regex": "^[a-z0-9-]*$",
+      "description": "Rendered as the section's HTML id. Nav links point at #<anchorId>."
+    },
+    "slides": {
+      "type": "component",
+      "repeatable": true,
+      "component": "feature.slide"
+    }
+  }
+}
