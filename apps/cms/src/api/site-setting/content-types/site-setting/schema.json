@@ -1,0 +1,69 @@
+{
+  "kind": "singleType",
+  "collectionName": "site_settings",
+  "info": {
+    "singularName": "site-setting",
+    "pluralName": "site-settings",
+    "displayName": "Site Settings",
+    "description": "Header, footer and the order modal \u2014 chrome shared by every page."
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "logo": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "headerLinks": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.link"
+    },
+    "cta": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.cta"
+    },
+    "orderModal": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.order-modal"
+    },
+    "footerTagline": {
+      "type": "text"
+    },
+    "footerNavTitle": {
+      "type": "string",
+      "default": "Navigation"
+    },
+    "footerLinks": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.link"
+    },
+    "yearLabel": {
+      "type": "string",
+      "default": "Year"
+    },
+    "year": {
+      "type": "string"
+    },
+    "copyright": {
+      "type": "string"
+    },
+    "credits": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.credit"
+    },
+    "marqueeText": {
+      "type": "string",
+      "description": "Repeating strip along the very bottom."
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_sections_manifestos",
+  "info": {
+    "displayName": "Manifesto",
+    "icon": "quote",
+    "description": "Large serif statement on black, lightening as it scrolls."
+  },
+  "options": {},
+  "attributes": {
+    "anchorId": {
+      "type": "string",
+      "regex": "^[a-z0-9-]*$",
+      "description": "Rendered as the section's HTML id. Nav links point at #<anchorId>."
+    },
+    "body": {
+      "type": "text",
+      "required": true,
+      "description": "Colour-scrubbed word by word as you scroll."
+    },
+    "showRule": {
+      "type": "boolean",
+      "default": true
+    }
+  }
+}

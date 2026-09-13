@@ -1,0 +1,35 @@
+{
+  "collectionName": "components_feature_slides",
+  "info": {
+    "displayName": "Feature Slide",
+    "icon": "slideshow",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "headlineTop": {
+      "type": "string",
+      "required": true
+    },
+    "headlineMiddle": {
+      "type": "string",
+      "description": "The reference's first slide has a three-line headline."
+    },
+    "headlineBottom": {
+      "type": "string"
+    },
+    "cardTitle": {
+      "type": "string",
+      "required": true
+    },
+    "cardBody": {
+      "type": "text",
+      "required": true
+    },
+    "media": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.media"
+    }
+  }
+}

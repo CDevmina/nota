@@ -1,0 +1,49 @@
+{
+  "collectionName": "components_sections_inside_boxes",
+  "info": {
+    "displayName": "Inside The Box",
+    "icon": "cube",
+    "description": "Circular mask reveal, box render, product cards and pill tags."
+  },
+  "options": {},
+  "attributes": {
+    "anchorId": {
+      "type": "string",
+      "regex": "^[a-z0-9-]*$",
+      "description": "Rendered as the section's HTML id. Nav links point at #<anchorId>."
+    },
+    "titleTop": {
+      "type": "string",
+      "description": "Muted half of the split heading."
+    },
+    "titleBottom": {
+      "type": "string",
+      "required": true
+    },
+    "subtitle": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    },
+    "longCopy": {
+      "type": "text",
+      "description": "The large centred serif paragraph."
+    },
+    "boxMedia": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.media"
+    },
+    "products": {
+      "type": "component",
+      "repeatable": true,
+      "component": "inside.product"
+    },
+    "tags": {
+      "type": "component",
+      "repeatable": true,
+      "component": "inside.tag"
+    }
+  }
+}

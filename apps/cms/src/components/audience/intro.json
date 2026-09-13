@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_audience_intros",
+  "info": {
+    "displayName": "Audience Intro",
+    "icon": "align-left",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "paragraph": {
+      "type": "text",
+      "required": true
+    }
+  }
+}

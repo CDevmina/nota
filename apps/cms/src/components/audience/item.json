@@ -1,0 +1,26 @@
+{
+  "collectionName": "components_audience_items",
+  "info": {
+    "displayName": "Audience Item",
+    "icon": "user",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "body": {
+      "type": "text",
+      "required": true
+    },
+    "indentLevel": {
+      "type": "integer",
+      "default": 0,
+      "min": 0,
+      "max": 4,
+      "description": "Each block sits further right than the last on the reference."
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "kind": "collectionType",
+  "collectionName": "subscribers",
+  "info": {
+    "singularName": "subscriber",
+    "pluralName": "subscribers",
+    "displayName": "Subscriber",
+    "description": "Email captures from the order modal. Public role may create only, never read."
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "email": {
+      "type": "email",
+      "required": true,
+      "unique": true
+    },
+    "source": {
+      "type": "string",
+      "default": "homepage-order-modal"
+    },
+    "userAgent": {
+      "type": "string"
+    },
+    "submittedAt": {
+      "type": "datetime"
+    }
+  }
+}
