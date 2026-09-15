@@ -58,8 +58,7 @@ const SURFACE: Record<Section['__component'], 'light' | 'dark'> = {
 };
 
 export default function SectionRenderer({ sections }: { sections: Section[] }) {
-  // The reference alternates its two hand-over devices down the page.
-  let crossings = 0;
+
   return (
     <>
       {sections.map((section, index) => {
@@ -84,10 +83,14 @@ export default function SectionRenderer({ sections }: { sections: Section[] }) {
           SURFACE[previous.__component] === 'dark' &&
           SURFACE[section.__component] === 'light';
 
+        // The reference pairs each device with the section it introduces: the
+        // circle opens "Inside the box", the staircase opens the others. Keying
+        // on the component rather than on position keeps that true when an
+        // editor reorders the zone.
         let handover: React.ReactNode = null;
         if (entersLight) {
-          handover = crossings % 2 === 0 ? <StaircaseWipe /> : <CircleReveal />;
-          crossings += 1;
+          handover =
+            section.__component === 'sections.inside-box' ? <CircleReveal /> : <StaircaseWipe />;
         }
 
         return (

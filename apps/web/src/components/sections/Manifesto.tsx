@@ -20,7 +20,7 @@ export default function Manifesto({ section }: { section: ManifestoSection }) {
       <ScrollStage screens={2.2}>
         <div className="camera flex flex-col justify-center px-6 md:px-12">
           <p
-            className="display mx-auto max-w-6xl"
+            className="display mx-auto max-w-6xl text-balance"
             style={{ ['--chars' as string]: chars.length }}
           >
             {chars.map((char, i) => (

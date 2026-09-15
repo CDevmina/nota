@@ -1,5 +1,7 @@
 import type { InsideBoxSection } from '@/lib/types';
 import SectionMedia from '../SectionMedia';
+import ScrubReveal from '../motion/ScrubReveal';
+import BlindReveal from '../motion/BlindReveal';
 
 /** Split heading, box render, the long serif paragraph, products and pill tags. */
 export default function InsideBox({ section }: { section: InsideBoxSection }) {
@@ -17,8 +19,9 @@ export default function InsideBox({ section }: { section: InsideBoxSection }) {
         </h2>
 
         {section.boxMedia?.image ? (
-          <div className="mx-auto mt-16 max-w-5xl overflow-hidden bg-[#f1f1f1]">
+          <div className="relative mx-auto mt-16 max-w-5xl overflow-hidden bg-[#f1f1f1]">
             <SectionMedia media={section.boxMedia} className="h-auto w-full object-cover" />
+            <BlindReveal />
           </div>
         ) : null}
 
@@ -30,19 +33,23 @@ export default function InsideBox({ section }: { section: InsideBoxSection }) {
         ) : null}
 
         {section.longCopy ? (
-          <p className="mx-auto mt-24 max-w-5xl text-center font-[family-name:var(--font-display)] text-[clamp(1.5rem,3.7vw,4rem)] leading-[1.1] tracking-[-0.03em]">
-            {section.longCopy}
-          </p>
+          <ScrubReveal
+            text={section.longCopy}
+            from="#e6e6e6"
+            to="#000000"
+            className="mx-auto mt-24 max-w-5xl text-center font-[family-name:var(--font-display)] text-[clamp(1.5rem,3.7vw,4rem)] leading-[1.1] tracking-[-0.03em]"
+          />
         ) : null}
 
         <div className="mt-24 grid gap-10 md:grid-cols-2">
           {section.products.map((product) => (
-            <article key={product.id}>
-              <div className="overflow-hidden bg-[#f1f1f1]">
+            <article key={product.id} className="bg-[#f1f1f1] p-8">
+              <h3 className="card-title">{product.title}</h3>
+              <p className="spec-item mt-3 max-w-sm text-black/70">{product.body}</p>
+              <div className="relative mt-8 overflow-hidden">
                 <SectionMedia media={product.media} className="h-auto w-full object-cover" />
+                <BlindReveal slats={10} />
               </div>
-              <h3 className="card-title mt-6">{product.title}</h3>
-              <p className="spec-item mt-3 text-black/70">{product.body}</p>
             </article>
           ))}
         </div>

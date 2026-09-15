@@ -212,11 +212,19 @@ body {
 
 /* ---- manifesto: per character, #666666 -> #ffffff over first 17% ------ */
 .scrub-char {
+  /* The manifesto resolves over the first 17% of its stage; a standalone
+     ScrubReveal measures its own 0..1 and sets --scrub-window to 1. */
   color: color-mix(
     in srgb,
-    #ffffff calc((var(--p) / 0.17 * var(--chars) - var(--i)) * 100%),
-    #666666
+    var(--scrub-to, #ffffff)
+      calc((var(--p) / var(--scrub-window, 0.17) * var(--chars) - var(--i)) * 100%),
+    var(--scrub-from, #666666)
   );
+}
+
+/* A self-measuring reveal spans its whole travel rather than a slice of it. */
+[style*="--scrub-from"] {
+  --scrub-window: 1;
 }
 
 /* ---- stepped sections: continuous, scroll-linked, no transitions -------
@@ -288,7 +296,7 @@ body {
   }
 
   .scrub-char {
-    color: #ffffff;
+    color: var(--scrub-to, #ffffff);
   }
 
   .slide {
@@ -331,4 +339,25 @@ body {
 /* Anchor targets must clear the fixed header when jumped to. */
 [id] {
   scroll-margin-top: var(--header-h);
+}
+
+/* ---- venetian blind: slats retract left to right, staggered ------------ */
+.blind {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  pointer-events: none;
+}
+
+.blind-slat {
+  background: #f1f1f1;
+  transform-origin: left center;
+  /* Slat i starts at i/slats of the travel and takes the rest to retract. */
+  scale: clamp(0, calc(1 - (var(--p) * (var(--slats) + 4) - var(--i))), 1) 1;
+}
+
+@media (max-width: 991px), (prefers-reduced-motion: reduce) {
+  .blind {
+    display: none;
+  }
 }
