@@ -11,6 +11,7 @@ import Features from './sections/Features';
 import InsideBox from './sections/InsideBox';
 import Colorways from './sections/Colorways';
 import StaircaseWipe from './motion/StaircaseWipe';
+import TowerWipe from './motion/TowerWipe';
 import CircleReveal from './motion/CircleReveal';
 
 /**
@@ -83,16 +84,25 @@ export default function SectionRenderer({ sections }: { sections: Section[] }) {
         const entersLight = was === 'dark' && now === 'light';
         const entersDark = was === 'light' && now === 'dark';
 
-        // The reference pairs each device with the section it introduces: the
-        // circle opens "Inside the box", the staircase opens the others. Keying
-        // on the component rather than on position keeps that true when an
-        // editor reorders the zone.
+        // The reference pairs each device with the section it introduces, so
+        // key on the component rather than on position and an editor can
+        // reorder the zone without the transitions following the wrong beat.
+        //
+        //   inside-box  circle mask
+        //   manifesto   black stepped tower growing out of the pen
+        //   features    dark columns wiping DOWN from the top
+        //   otherwise   the white staircase sweeping up
         let handover: React.ReactNode = null;
         if (entersLight) {
           handover =
             section.__component === 'sections.inside-box' ? <CircleReveal /> : <StaircaseWipe />;
         } else if (entersDark) {
-          handover = <StaircaseWipe tone="dark" />;
+          handover =
+            section.__component === 'sections.manifesto' ? (
+              <TowerWipe />
+            ) : (
+              <StaircaseWipe tone="dark" direction="down" />
+            );
         }
 
         return (
