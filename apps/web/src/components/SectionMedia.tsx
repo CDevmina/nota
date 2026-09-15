@@ -3,9 +3,13 @@ import type { Media } from '@/lib/types';
 /**
  * Renders a section's media slot.
  *
- * The reference art-directs per breakpoint rather than scaling, so a mobile
- * crop — when the editor supplied one — is swapped in below 992px via <picture>
- * rather than CSS, so the browser only downloads the one it uses.
+ * Video wins over image when the editor supplied one — the reference's hero and
+ * paper sections are clips, not stills. Below 992px the mobile variant is used
+ * instead, because the reference art-directs per breakpoint rather than scaling,
+ * and `<source media=...>` means the browser downloads only the one it needs.
+ *
+ * `image` stays required in the CMS even for video slots: it is the poster and
+ * the fallback for anyone whose browser or connection never plays the clip.
  */
 export default function SectionMedia({
   media,
@@ -16,18 +20,40 @@ export default function SectionMedia({
   className?: string;
   priority?: boolean;
 }) {
-  if (!media?.image?.url) return null;
+  if (!media) return null;
 
-  const { image, mobileImage, alt } = media;
+  const { image, mobileImage, video, mobileVideo, poster, alt } = media;
+
+  if (video?.url) {
+    return (
+      <video
+        className={className}
+        poster={poster?.url ?? image?.url ?? undefined}
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload={priority ? 'auto' : 'metadata'}
+        aria-label={alt}
+      >
+        {mobileVideo?.url ? (
+          <source src={mobileVideo.url} media="(max-width: 991px)" type={mobileVideo.mime} />
+        ) : null}
+        <source src={video.url} type={video.mime} />
+      </video>
+    );
+  }
+
+  if (!image?.url) return null;
 
   return (
     <picture>
       {mobileImage?.url ? (
         <source media="(max-width: 991px)" srcSet={mobileImage.url} />
       ) : null}
-      {/* A plain img: Strapi serves from a separate origin whose domain
-          changes per environment, so this avoids tying deploys to a
-          next.config image allowlist. */}
+      {/* A plain img: Strapi serves from a separate origin whose domain changes
+          per environment, so this avoids tying deploys to a next.config image
+          allowlist. */}
       <img
         src={image.url}
         alt={alt ?? image.alternativeText ?? ''}
