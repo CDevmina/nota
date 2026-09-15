@@ -1,6 +1,7 @@
 import type { InsideBoxSection } from '@/lib/types';
 import SectionMedia from '../SectionMedia';
 import ScrubReveal from '../motion/ScrubReveal';
+import ScrollStage from '../ScrollStage';
 import BlindReveal from '../motion/BlindReveal';
 
 /** Split heading, box render, the long serif paragraph, products and pill tags. */
@@ -56,17 +57,26 @@ export default function InsideBox({ section }: { section: InsideBoxSection }) {
       </div>
 
       {section.tags.length > 0 ? (
-        <div className="bg-black px-6 py-24 md:px-12 md:py-32">
-          <div className="grid gap-6 md:grid-cols-2">
-            {section.tags.map((tag) => (
-              <figure key={tag.id} className="relative overflow-hidden rounded-2xl">
-                <SectionMedia media={tag.media} className="h-auto w-full object-cover" />
-                <figcaption className="label absolute bottom-5 left-5 rounded-full bg-white/15 px-4 py-2 text-white backdrop-blur-md">
-                  {tag.label}
-                </figcaption>
-              </figure>
-            ))}
-          </div>
+        <div data-surface="dark" className="bg-black">
+          {/* Measured on the reference: each card scales 1.3 to 1 while fading
+              in, rather than simply appearing. */}
+          <ScrollStage screens={2.8}>
+            <div className="camera flex items-center px-6 md:px-12">
+              <div className="grid w-full gap-6 md:grid-cols-2">
+                {section.tags.map((tag) => (
+                  <figure
+                    key={tag.id}
+                    className="detail-card relative overflow-hidden rounded-2xl"
+                  >
+                    <SectionMedia media={tag.media} className="h-auto w-full object-cover" />
+                    <figcaption className="label absolute bottom-5 left-5 rounded-full bg-white/15 px-4 py-2 text-white backdrop-blur-md">
+                      {tag.label}
+                    </figcaption>
+                  </figure>
+                ))}
+              </div>
+            </div>
+          </ScrollStage>
         </div>
       ) : null}
     </section>

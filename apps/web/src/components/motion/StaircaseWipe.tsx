@@ -8,15 +8,20 @@ import ScrollStage from '../ScrollStage';
  * stagger finishing at progress 0.5, 0.6, 0.7, 0.8, 0.9, 1.0. A black overlay
  * behind them fades to 0.75, darkening the outgoing section.
  *
+ * The reference uses the same mechanism in both directions: white curtains
+ * hand over from the dark hero into the white specifications, and black ones
+ * hand over from the white transition into the dark audience section. The dark
+ * variant is pulled up 0.7 of a viewport rather than a full one, as measured.
+ *
  * Decorative only — it carries no content and is hidden from assistive tech.
  */
-export default function StaircaseWipe() {
+export default function StaircaseWipe({ tone = 'light' }: { tone?: 'light' | 'dark' }) {
   return (
     <div aria-hidden="true" className="relative">
-      <ScrollStage screens={1.8} pullUpVh={1}>
+      <ScrollStage screens={1.8} pullUpVh={tone === 'dark' ? 0.7 : 1}>
         <div className="camera">
-          <div className="stair-dim" />
-          <div className="stair">
+          {tone === 'light' ? <div className="stair-dim" /> : null}
+          <div className="stair" data-tone={tone}>
             {Array.from({ length: 6 }).map((_, i) => (
               <div key={i} className="stair-panel" style={{ ['--i' as string]: i }} />
             ))}

@@ -78,10 +78,10 @@ export default function SectionRenderer({ sections }: { sections: Section[] }) {
         }
 
         const previous = sections[index - 1];
-        const entersLight =
-          previous &&
-          SURFACE[previous.__component] === 'dark' &&
-          SURFACE[section.__component] === 'light';
+        const was = previous ? SURFACE[previous.__component] : null;
+        const now = SURFACE[section.__component];
+        const entersLight = was === 'dark' && now === 'light';
+        const entersDark = was === 'light' && now === 'dark';
 
         // The reference pairs each device with the section it introduces: the
         // circle opens "Inside the box", the staircase opens the others. Keying
@@ -91,6 +91,8 @@ export default function SectionRenderer({ sections }: { sections: Section[] }) {
         if (entersLight) {
           handover =
             section.__component === 'sections.inside-box' ? <CircleReveal /> : <StaircaseWipe />;
+        } else if (entersDark) {
+          handover = <StaircaseWipe tone="dark" />;
         }
 
         return (
