@@ -1,5 +1,6 @@
 import type { SiteSettings } from '@/lib/types';
 import HeaderTheme from './HeaderTheme';
+import ScrambleText from './motion/ScrambleText';
 import MobileMenu from './MobileMenu';
 import OrderModal from './OrderModal';
 
@@ -24,14 +25,14 @@ export default function SiteHeader({ settings }: { settings: SiteSettings | null
         </a>
 
         <nav className="hidden items-center gap-8 lg:flex" aria-label="Primary">
-          {headerLinks.map((link) => (
+          {headerLinks.map((link, i) => (
             <a
               key={link.id}
               href={link.href}
               className="label opacity-90 transition-opacity hover:opacity-60"
               {...(link.isExternal ? { target: '_blank', rel: 'noreferrer' } : {})}
             >
-              {link.label}
+              <ScrambleText text={link.label} delayMs={i * 70} />
             </a>
           ))}
         </nav>
