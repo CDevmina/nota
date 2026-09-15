@@ -6,10 +6,13 @@ import ScrollStage from '../ScrollStage';
 /**
  * Colourways — 3.5 screens, five states.
  *
- * Measured: a pure opacity crossfade, no transforms at all. The background and
- * the headline are offset from one another — the incoming background reaches
- * full opacity while the outgoing headline is still fading — which is what
- * reads as the two halves of the headline swapping independently.
+ * The pen stands upright in the centre of the viewport and the headline sits
+ * *around* it: the name to its left, the tagline to its right. That split is
+ * the whole composition — stacking the two lines above the pen loses it.
+ *
+ * Measured: a pure opacity crossfade between states, no transforms. The
+ * background leads and the headline trails slightly, which is what reads as
+ * the two halves swapping independently.
  */
 export default function Colorways({ section }: { section: ColorwaysSection }) {
   const items = section.items;
@@ -22,29 +25,40 @@ export default function Colorways({ section }: { section: ColorwaysSection }) {
           {items.map((item, i) => (
             <div
               key={item.id}
-              className="slide grid place-items-center"
-              style={{
-                background: `linear-gradient(160deg, ${item.gradientStart} 0%, ${item.gradientEnd} 100%)`,
-                color: item.textColor,
-                ["--i"]: i,
-                ["--last"]: items.length - 1,
-              } as CSSProperties}
+              className="slide"
+              style={
+                {
+                  background: `linear-gradient(180deg, ${item.gradientStart} 0%, ${item.gradientEnd} 100%)`,
+                  color: item.textColor,
+                  '--i': i,
+                  '--last': items.length - 1,
+                } as CSSProperties
+              }
             >
-              <div
-                className="slide-trail grid w-full gap-6 px-6 md:px-12"
-                style={{ ["--i"]: i, ["--last"]: items.length - 1 } as CSSProperties}
-              >
-                <h2 className="display text-center">
-                  <span className="block">{item.name}</span>
-                  <span className="block opacity-70">{item.tagline}</span>
+              {/* The pen is the centre column; the headline flanks it. */}
+              <div className="colorway-grid">
+                <h2
+                  className="slide-trail display colorway-name"
+                  style={{ ['--i' as string]: i, ['--last' as string]: items.length - 1 } as CSSProperties}
+                >
+                  {item.name}
                 </h2>
 
                 {item.media?.image ? (
                   <SectionMedia
                     media={item.media}
-                    className="mx-auto max-h-[34svh] w-auto object-contain md:max-h-[42svh]"
+                    className="colorway-pen h-full w-auto object-contain"
                   />
-                ) : null}
+                ) : (
+                  <div aria-hidden="true" />
+                )}
+
+                <h2
+                  className="slide-trail display colorway-tagline"
+                  style={{ ['--i' as string]: i, ['--last' as string]: items.length - 1 } as CSSProperties}
+                >
+                  {item.tagline}
+                </h2>
               </div>
             </div>
           ))}
@@ -57,7 +71,7 @@ export default function Colorways({ section }: { section: ColorwaysSection }) {
               <span
                 key={s.id}
                 className="seg"
-                style={{ ["--i"]: i, ["--last"]: items.length - 1 } as CSSProperties}
+                style={{ ['--i' as string]: i, ['--last' as string]: items.length - 1 } as CSSProperties}
               />
             ))}
           </div>

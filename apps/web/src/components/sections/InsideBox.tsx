@@ -62,7 +62,7 @@ export default function InsideBox({ section }: { section: InsideBoxSection }) {
               in, rather than simply appearing. */}
           <ScrollStage screens={2.8}>
             <div className="camera flex items-center px-6 md:px-12">
-              <div className="grid w-full gap-6 md:grid-cols-2">
+              <div className="detail-grid grid w-full gap-6 md:grid-cols-2">
                 {section.tags.map((tag) => (
                   <figure
                     key={tag.id}
