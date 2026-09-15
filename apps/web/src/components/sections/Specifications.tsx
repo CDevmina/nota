@@ -8,7 +8,7 @@ export default function Specifications({ section }: { section: SpecificationsSec
     <section
       data-surface="light"
       id={section.anchorId ?? undefined}
-      className="relative bg-white pb-24 pt-[calc(var(--header-h)+4rem)] text-black md:pb-32"
+      className="relative bg-white py-24 text-black md:py-32"
     >
       <h2 className="display px-6 text-center md:px-12">
         {section.eyebrow ? (
