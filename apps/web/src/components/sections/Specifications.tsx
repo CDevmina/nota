@@ -5,6 +5,7 @@ import SectionMedia from '../SectionMedia';
 export default function Specifications({ section }: { section: SpecificationsSection }) {
   return (
     <section
+      data-surface="light"
       id={section.anchorId ?? undefined}
       className="relative bg-white py-24 text-black md:py-32"
     >
@@ -18,8 +19,13 @@ export default function Specifications({ section }: { section: SpecificationsSec
       </h2>
 
       {section.media?.image ? (
-        <div className="mx-auto mt-12 max-w-4xl px-6">
-          <SectionMedia media={section.media} className="mx-auto h-auto w-full object-contain" />
+        <div className="mt-12 flex justify-center px-6">
+          {/* The nib render is small and portrait — cap it by height and let the
+              width follow, rather than stretching it to the container. */}
+          <SectionMedia
+            media={section.media}
+            className="max-h-[52svh] w-auto object-contain"
+          />
         </div>
       ) : null}
 
