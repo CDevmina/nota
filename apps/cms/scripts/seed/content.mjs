@@ -258,7 +258,7 @@ export const homepage = {
         {
           title: 'Charging Adapter',
           body: 'Compact USB-C power adapter with stable output for everyday charging. Designed for safe, efficient power delivery with minimal heat.',
-          media: { image: 'product-adapter.jpg', alt: 'The USB-C charging adapter' },
+          media: { image: 'product-charger.jpg', alt: 'The USB-C cable plugged into the charging adapter' },
         },
       ],
       // Order matters: the first six fill the detail bento's six measured

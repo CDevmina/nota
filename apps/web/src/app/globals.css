@@ -662,3 +662,136 @@ body {
     left: 12px;
   }
 }
+
+/*
+ * "Inside the box" — the box photo and the two product cards.
+ *
+ * All three are the same panel: measured on the reference at 1440x900, the
+ * caption sits 20px inside the top-right corner in a 360px block, and its
+ * description hangs a further 60px in at 300px wide. Expressed in vw so the
+ * proportion holds: 20px = 1.39vw, 360px = 25vw, 60px = 4.17vw, 300px =
+ * 20.83vw.
+ */
+.inside-column {
+  padding: 6vw 2.78vw;
+}
+
+.inside-products {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.39vw;
+  margin-top: 6vw;
+}
+
+.inside-panel {
+  position: relative;
+  width: 100%;
+}
+
+.inside-panel__frame {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  background: #f1f1f1;
+}
+
+.inside-panel__media,
+.inside-panel picture,
+.inside-panel picture img,
+.inside-panel video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.inside-panel__caption {
+  position: absolute;
+  top: 1.39vw;
+  right: 1.39vw;
+  width: 25vw;
+}
+
+.inside-panel__body {
+  margin-left: 4.17vw;
+  margin-top: 0.7vw;
+  width: 20.83vw;
+  font-family: var(--font-ui);
+  font-weight: 400;
+  font-size: 1.25vw;
+  line-height: 1.35;
+  letter-spacing: -0.02em;
+  color: rgb(0 0 0 / 0.72);
+}
+
+/*
+ * Venetian blinds. 25 slats on the reference, each 1/25th of the panel, and
+ * they *thin* rather than slide — `scaleY` toward their own top edge, so the
+ * image appears in bands that widen until they meet.
+ *
+ * `--p` is written by BlindReveal once per frame. `--t` is this slat's own
+ * progress: the flat variant retracts them together, and the diagonal variant
+ * offsets each by its index so the uncovered edge travels at an angle.
+ */
+.blind {
+  --p: 0;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.blind-slat {
+  --t: var(--p);
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: calc(100% / var(--slats));
+  top: calc(var(--i) * 100% / var(--slats));
+  background: #fff;
+  transform-origin: top;
+  transform: scaleY(clamp(0, 1 - var(--t), 1));
+}
+
+/* Each slat starts a little later than the one above it, which drags the
+   uncovered edge diagonally across the card. The 0.6 leaves enough of the
+   range for the last slat to finish inside the same scroll distance. */
+.blind[data-diagonal] .blind-slat {
+  --t: calc((var(--p) - var(--i) / var(--slats) * 0.6) / 0.4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .blind {
+    display: none;
+  }
+}
+
+@media (max-width: 991px) {
+  .inside-column {
+    padding: 48px 16px;
+  }
+
+  .inside-products {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-top: 32px;
+  }
+
+  /* The caption cannot sit in the corner of a phone-width panel, so it goes
+     under the image and the hanging indent is dropped. */
+  .inside-panel__frame {
+    border-radius: 4px;
+  }
+
+  .inside-panel__caption {
+    position: static;
+    width: 100%;
+    margin-top: 12px;
+  }
+
+  .inside-panel__body {
+    margin-left: 0;
+    width: 100%;
+    font-size: 14px;
+  }
+}
