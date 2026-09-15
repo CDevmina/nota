@@ -154,7 +154,7 @@ export interface InsideBoxSection extends SectionBase {
   longCopy: string | null;
   boxMedia: Media | null;
   products: { id: number; title: string; body: string; media: Media | null }[];
-  tags: { id: number; label: string; media: Media | null }[];
+  tags: { id: number; label: string | null; media: Media | null }[];
 }
 
 export interface ColorwaysSection extends SectionBase {

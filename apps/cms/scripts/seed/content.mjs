@@ -261,11 +261,23 @@ export const homepage = {
           media: { image: 'product-adapter.jpg', alt: 'The USB-C charging adapter' },
         },
       ],
+      // Order matters: the first six fill the detail bento's six measured
+      // slots, top-left to bottom-right. Two of them carry no label on the
+      // reference, which is why `label` is optional on the component.
       tags: [
         { label: 'Flush-fit precision cap', media: { image: 'tag-cap.jpg', alt: 'The pen cap seated flush with the body' } },
+        { media: { image: 'tag-detail-a.jpg', alt: 'The pen resting on a notebook' } },
         { label: 'Refined colors. Personal expression', media: { image: 'tag-colors.jpg', alt: 'Pens in several colourways' } },
-        { label: 'Durable metal nib, low-profile control button', media: { image: 'tag-nib.jpg', alt: 'The metal nib and control button' } },
+        {
+          label: 'Durable metal nib, low-profile control button',
+          media: {
+            image: 'tag-nib.jpg',
+            video: 'hero-ambient.mp4',
+            alt: 'The metal nib and control button',
+          },
+        },
         { label: 'Aluminum body', media: { image: 'tag-body.jpg', alt: 'The machined aluminium body' } },
+        { media: { image: 'tag-detail-b.jpg', alt: 'The pen held upright in the hand' } },
       ],
     },
 
