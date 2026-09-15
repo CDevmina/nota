@@ -1,19 +1,18 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import ScrubChars from './ScrubChars';
 
 /**
  * Text that writes itself in character by character as it passes the viewport.
  *
- * The reference uses this twice with different palettes: the manifesto lightens
- * from #666666 to white on black, and the "inside the box" paragraph resolves
- * from near-white to black on white. Same mechanism, swapped colours.
+ * The reference uses this twice with different palettes: the manifesto
+ * lightens from #666666 to white on black, and the "inside the box" paragraph
+ * resolves from near-white to black on white.
  *
- * Unlike the manifesto, this one is not inside a scroll stage, so it measures
- * its own position: progress runs from the moment the element enters the bottom
- * of the viewport to the moment it reaches the upper third. One rAF-throttled
- * scroll listener writes `--p`; the colour of every character is a `color-mix`
- * driven by it, so no JavaScript touches the spans per frame.
+ * Unlike the manifesto this one is not inside a scroll stage, so it measures
+ * its own position — progress runs from the element entering the bottom of the
+ * viewport to it reaching the upper third.
  */
 export default function ScrubReveal({
   text,
@@ -22,13 +21,11 @@ export default function ScrubReveal({
   className = '',
 }: {
   text: string;
-  /** Colour before a character resolves. */
   from: string;
-  /** Colour once it has. */
   to: string;
   className?: string;
 }) {
-  const ref = useRef<HTMLParagraphElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const el = ref.current;
@@ -76,30 +73,12 @@ export default function ScrubReveal({
     };
   }, []);
 
-  const chars = [...text];
-
   return (
-    <p
+    <div
       ref={ref}
-      className={className}
-      style={
-        {
-          '--chars': chars.length,
-          '--scrub-from': from,
-          '--scrub-to': to,
-        } as React.CSSProperties
-      }
+      style={{ '--scrub-from': from, '--scrub-to': to } as React.CSSProperties}
     >
-      {chars.map((char, i) =>
-        char === ' ' ? (
-          ' '
-        ) : (
-          <span key={i} className="scrub-char" style={{ ['--i' as string]: i }} aria-hidden>
-            {char}
-          </span>
-        ),
-      )}
-      <span className="sr-only">{text}</span>
-    </p>
+      <ScrubChars text={text} className={className} />
+    </div>
   );
 }
