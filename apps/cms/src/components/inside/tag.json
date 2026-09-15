@@ -1,20 +1,21 @@
 {
   "collectionName": "components_inside_tags",
   "info": {
-    "displayName": "Pill Tag",
-    "icon": "priceTag",
-    "description": ""
+    "displayName": "Detail Card",
+    "icon": "picture",
+    "description": "One card in the detail bento. The first six fill the measured layout; any beyond that stack below it."
   },
   "options": {},
   "attributes": {
     "label": {
       "type": "string",
-      "required": true
+      "description": "Optional. Shown as a pill over the image. Two cards in the reference carry no label — leave this blank for those."
     },
     "media": {
       "type": "component",
       "repeatable": false,
-      "component": "shared.media"
+      "component": "shared.media",
+      "description": "Still or clip for this card. The card crops it to a fixed shape, so the subject should sit near the centre."
     }
   }
 }

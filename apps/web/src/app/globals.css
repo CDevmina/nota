@@ -507,3 +507,158 @@ body {
   background: var(--black);
   opacity: clamp(0, calc(var(--p) * 4), 0.85);
 }
+
+/*
+ * Detail bento (`section.details` on the reference).
+ *
+ * A plain block, deliberately: sampling the reference's cards at five scroll
+ * depths returns `transform: none` and `opacity: 1` every time. There is no
+ * camera and no scroll effect here — the only transform is a permanent
+ * `scale(1.3)` on the image, which crops it rather than animating it.
+ *
+ * Radii were measured at two widths (80.06px at 1440, 61.95px at 1024) and fit
+ * the line `17px + 4.35vw`; the two larger tiers are 2.5x and 5x that, which
+ * reproduces the measured 200px and 400px at 1440.
+ */
+.detail-bento {
+  --bento-gap: 1.39vw;
+  --radius-sm: calc(17px + 4.35vw);
+  --radius-lg: calc(42.5px + 10.875vw);
+  --radius-xl: calc(85px + 21.75vw);
+  padding: 0 2.78vw;
+}
+
+.detail-bento__column {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 2.78vw 0;
+}
+
+.detail-bento__row {
+  display: flex;
+  flex-direction: row;
+  gap: var(--bento-gap);
+}
+
+.detail-bento__row--center {
+  align-items: center;
+}
+
+.detail-bento__row--top {
+  align-items: flex-start;
+}
+
+/* The two left cards stack so the tall arch beside them sets the row height. */
+.detail-bento__stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bento-gap);
+  width: 50%;
+}
+
+.detail-bento__video {
+  padding: var(--bento-gap) 0;
+}
+
+.detail-bento__overflow {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--bento-gap);
+  margin-top: var(--bento-gap);
+}
+
+.detail-card {
+  position: relative;
+  overflow: hidden;
+  background: #111;
+}
+
+.detail-card[data-radius='sm'] {
+  border-radius: var(--radius-sm);
+}
+.detail-card[data-radius='lg'] {
+  border-radius: var(--radius-lg);
+}
+.detail-card[data-radius='xl'] {
+  border-radius: var(--radius-xl);
+}
+
+/*
+ * The image is over-scaled and centred rather than fitted. That is what the
+ * reference does, and it is why the cards can carry six different aspect
+ * ratios without anyone having to re-crop the source art.
+ */
+.detail-card__media,
+.detail-card picture,
+.detail-card video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Only the stills are over-scaled. The reference's video card measured
+   `transform: none`, so it is fitted, not cropped. */
+.detail-card picture img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.3);
+}
+
+.detail-card__label {
+  position: absolute;
+  bottom: 1.39vw;
+  left: 1.39vw;
+  padding: 0.7em 1.2em;
+  border-radius: 100px;
+  background: rgb(255 255 255 / 0.15);
+  backdrop-filter: blur(12px);
+  color: #fff;
+  /* The pill is sized by its text; without this a two-word label wraps to two
+     lines at narrow widths and the pill grows into a rectangle. */
+  white-space: nowrap;
+}
+
+/*
+ * Below the reference's own 992px breakpoint the bento collapses to a single
+ * column. The measured aspect ratios are kept — they are the crop, not the
+ * layout — but every card spans the full width.
+ */
+@media (max-width: 991px) {
+  .detail-bento {
+    --bento-gap: 12px;
+    padding: 0 16px;
+  }
+
+  .detail-bento__row,
+  .detail-bento__stack,
+  .detail-bento__overflow {
+    display: flex;
+    flex-direction: column;
+    gap: var(--bento-gap);
+    width: 100%;
+  }
+
+  .detail-bento__row {
+    gap: var(--bento-gap);
+  }
+
+  .detail-card {
+    width: 100% !important;
+  }
+
+  .detail-bento__column {
+    gap: var(--bento-gap);
+    padding: 24px 0;
+  }
+
+  .detail-card__label {
+    bottom: 12px;
+    left: 12px;
+  }
+}
