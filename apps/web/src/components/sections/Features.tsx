@@ -33,7 +33,7 @@ export default function Features({ section }: { section: FeaturesSection }) {
               </div>
 
               <div className="stage-fade-out relative grid h-full grid-rows-[auto_1fr_auto] px-6 pb-16 pt-[calc(var(--header-h)+2rem)] md:px-12">
-                <h3 className="display max-w-4xl text-balance">
+                <h3 className="display-mid max-w-[34%] text-balance">
                   <span className="block">{slide.headlineTop}</span>
                   {slide.headlineMiddle ? <span className="block">{slide.headlineMiddle}</span> : null}
                   {slide.headlineBottom ? <span className="block">{slide.headlineBottom}</span> : null}

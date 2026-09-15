@@ -48,10 +48,10 @@ export const siteSettings = {
   ],
   yearLabel: 'Year',
   year: '2026',
-  copyright: '@2026 Nōta Team',
+  copyright: '©2026 Nōta Team',
   credits: [
     { label: 'Made in Taptop', href: 'https://taptop.pro/' },
-    { label: 'Builded by NōtaTeam', href: null },
+    { label: 'Built by NōtaTeam', href: null },
     { label: 'Designed by Alice', href: 'https://www.behance.net/alicem' },
     { label: '& UPROCK Studio', href: 'https://www.uprock.ru/' },
   ],
@@ -139,7 +139,7 @@ export const homepage = {
           items: [
             { label: 'Notes sync automatically' },
             { label: 'Searchable over time' },
-            { label: 'Structured with ai support' },
+            { label: 'Structured with AI support' },
             { label: 'Ready when you return' },
           ],
         },

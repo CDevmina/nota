@@ -17,10 +17,10 @@ export default function Manifesto({ section }: { section: ManifestoSection }) {
 
   return (
     <section data-surface="dark" id={section.anchorId ?? undefined} className="bg-black">
-      <ScrollStage screens={2.2}>
-        <div className="camera flex flex-col justify-center px-6 md:px-12">
+      <ScrollStage screens={1.8}>
+        <div className="camera flex flex-col justify-center px-6 md:px-10">
           <p
-            className="display mx-auto max-w-6xl text-balance"
+            className="display-mid max-w-[75%]"
             style={{ ['--chars' as string]: chars.length }}
           >
             {chars.map((char, i) => (
@@ -37,7 +37,7 @@ export default function Manifesto({ section }: { section: ManifestoSection }) {
           </p>
 
           {section.showRule ? (
-            <hr className="mx-auto mt-14 w-full max-w-6xl border-white/20" />
+            <hr className="mt-12 w-full border-white/25" />
           ) : null}
         </div>
       </ScrollStage>
