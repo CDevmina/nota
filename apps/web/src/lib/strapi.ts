@@ -32,24 +32,49 @@ class StrapiError extends Error {
   }
 }
 
-async function get<T>(path: string, params: Record<string, string> = {}): Promise<T | null> {
-  const url = new URL(`${INTERNAL_URL}/api/${path}`);
+function buildUrl(origin: string, path: string, params: Record<string, string>) {
+  const url = new URL(`${origin}/api/${path}`);
   for (const [key, value] of Object.entries(params)) url.searchParams.set(key, value);
+  return url;
+}
 
+/**
+ * Reads a Strapi endpoint, preferring the private network and falling back to
+ * the public domain.
+ *
+ * The fallback is not redundancy for its own sake — it is what makes builds
+ * produce real content. Railway's builder has no route to
+ * `cms.railway.internal`, so a build-time fetch over the private network always
+ * fails; without the fallback every deploy baked an empty page and the live
+ * site showed "no content published" until a webhook or ISR rescued it. The
+ * builder can reach the public domain, so the prerender now has the real
+ * content in it.
+ *
+ * At request time the private hop succeeds and the fallback never runs, so
+ * normal traffic still never leaves the Railway project.
+ */
+async function get<T>(path: string, params: Record<string, string> = {}): Promise<T | null> {
   const token = process.env.STRAPI_API_TOKEN;
+  const origins = INTERNAL_URL === PUBLIC_URL ? [INTERNAL_URL] : [INTERNAL_URL, PUBLIC_URL];
 
-  let res: Response;
-  try {
-    res = await fetch(url, {
-      headers: token ? { Authorization: `Bearer ${token}` } : {},
-      next: { tags: [HOMEPAGE_TAG] },
-    });
-  } catch (cause) {
-    // Strapi unreachable. This is normal during a Railway build — the builder
-    // has no private-network route to the cms service, and cms may not even be
-    // running yet. Returning null lets the build finish and produce a page that
-    // fetches successfully at request time, instead of failing the deploy.
-    console.warn(`[strapi] unreachable at ${INTERNAL_URL}/api/${path}:`, cause);
+  let res: Response | null = null;
+  let lastCause: unknown = null;
+
+  for (const origin of origins) {
+    try {
+      res = await fetch(buildUrl(origin, path, params), {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        next: { tags: [HOMEPAGE_TAG] },
+      });
+      break;
+    } catch (cause) {
+      lastCause = cause;
+      res = null;
+    }
+  }
+
+  if (!res) {
+    console.error(`[strapi] no route to ${path} on ${origins.join(' or ')}:`, lastCause);
     return null;
   }
 
