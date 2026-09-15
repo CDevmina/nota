@@ -5,12 +5,26 @@ import { useEffect, useRef } from 'react';
 /**
  * Horizontal slats retracting to uncover whatever sits beneath.
  *
+ * Measured on the reference: each `inside__blinds-item` carries **25** slats of
+ * equal height (820px / 25 = 32.8px), full width, and they thin out rather than
+ * sliding away — the image appears in bands that widen until they meet.
+ *
  * This belongs to a single element rather than a scroll stage, so it measures
  * its own approach to centre screen: the render should uncover as it arrives,
- * not as a separate scroll beat. Staggering each slat by its index reveals the
- * image in bands rather than all at once.
+ * not as a separate scroll beat.
+ *
+ * `diagonal` offsets each slat's start by its index instead of retracting them
+ * together, so the uncovered edge travels across the card at an angle. The
+ * reference uses that variant on the two product cards and the flat one on the
+ * full-width box photo.
  */
-export default function BlindReveal({ slats = 8 }: { slats?: number }) {
+export default function BlindReveal({
+  slats = 25,
+  diagonal = false,
+}: {
+  slats?: number;
+  diagonal?: boolean;
+}) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -60,7 +74,13 @@ export default function BlindReveal({ slats = 8 }: { slats?: number }) {
   }, []);
 
   return (
-    <div ref={ref} aria-hidden="true" className="blind" style={{ ['--slats' as string]: slats }}>
+    <div
+      ref={ref}
+      aria-hidden="true"
+      className="blind"
+      data-diagonal={diagonal ? '' : undefined}
+      style={{ ['--slats' as string]: slats }}
+    >
       {Array.from({ length: slats }).map((_, i) => (
         <div key={i} className="blind-slat" style={{ ['--i' as string]: i }} />
       ))}
