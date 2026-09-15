@@ -11,8 +11,9 @@ import ScrollStage from '../ScrollStage';
 export default function CircleReveal() {
   return (
     <div aria-hidden="true" className="relative">
-      <ScrollStage screens={2.3} pullUpVh={1}>
-        <div className="camera">
+      <ScrollStage screens={1.8} pullUpVh={1}>
+        <div className="camera wipe-camera">
+          <div className="disc-dim" />
           <div className="disc" />
         </div>
       </ScrollStage>

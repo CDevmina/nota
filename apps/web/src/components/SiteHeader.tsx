@@ -1,12 +1,21 @@
 import type { SiteSettings } from '@/lib/types';
-import HeaderTheme from './HeaderTheme';
+import HeaderChrome from './HeaderChrome';
 import ScrambleText from './motion/ScrambleText';
 import MobileMenu from './MobileMenu';
 import OrderModal from './OrderModal';
 
 /**
- * Fixed header. Desktop shows the nav inline and the Order pill; below 992px
- * both collapse into a full-screen menu, matching the reference.
+ * Fixed header.
+ *
+ * Matching the reference: a small sans wordmark on the left with the nav links
+ * immediately after it — left-aligned, not centred — and a solid white widget
+ * on the right holding the brand mark and the black Order button. No background
+ * bar and no divider rule.
+ *
+ * It hides on scroll down and returns on scroll up. That is the reference's own
+ * behaviour, and it also removes a whole class of collisions: with no
+ * background, any content passing beneath a permanently visible header runs
+ * straight through the links.
  */
 export default function SiteHeader({ settings }: { settings: SiteSettings | null }) {
   if (!settings) return null;
@@ -17,38 +26,38 @@ export default function SiteHeader({ settings }: { settings: SiteSettings | null
 
   return (
     <>
-      <HeaderTheme />
-      <header className="site-header fixed inset-x-0 top-0 z-[100] h-[var(--header-h)]">
-      <div className="header-rule mx-auto flex h-full items-center justify-between gap-6 border-b px-6 md:px-12">
-        <a href="#top" className="display text-[1.6rem] leading-none">
-          Nōta
-        </a>
-
-        <nav className="hidden items-center gap-8 lg:flex" aria-label="Primary">
-          {headerLinks.map((link, i) => (
-            <a
-              key={link.id}
-              href={link.href}
-              className="label opacity-90 transition-opacity hover:opacity-60"
-              {...(link.isExternal ? { target: '_blank', rel: 'noreferrer' } : {})}
-            >
-              <ScrambleText text={link.label} delayMs={i * 70} />
+      <HeaderChrome />
+      <header className="site-header fixed inset-x-0 top-0 z-[100]">
+        <div className="flex items-start justify-between px-6 pt-6 md:px-10">
+          <div className="flex items-center gap-10">
+            <a href="#top" className="wordmark" aria-label="NŌTA, home">
+              Nōta
             </a>
-          ))}
-        </nav>
 
-        <div className="flex items-center gap-3">
-          {cta && orderModal ? (
-            <OrderModal
-              cta={cta}
-              price={price}
-              content={orderModal}
-              className="hidden lg:flex"
-            />
-          ) : null}
-          <MobileMenu settings={settings} price={price} />
+            <nav className="hidden items-center gap-[49px] lg:flex" aria-label="Primary">
+              {headerLinks.map((link, i) => (
+                <a
+                  key={link.id}
+                  href={link.href}
+                  className="nav-link"
+                  {...(link.isExternal ? { target: '_blank', rel: 'noreferrer' } : {})}
+                >
+                  <ScrambleText text={link.label} delayMs={i * 70} />
+                </a>
+              ))}
+            </nav>
+          </div>
+
+          <div className="flex items-center gap-3">
+            {cta && orderModal ? (
+              <div className="header-widget hidden lg:flex">
+                <span className="brand-mark" aria-hidden="true" />
+                <OrderModal cta={cta} price={price} content={orderModal} />
+              </div>
+            ) : null}
+            <MobileMenu settings={settings} price={price} />
+          </div>
         </div>
-      </div>
       </header>
     </>
   );

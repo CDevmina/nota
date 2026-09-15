@@ -19,7 +19,7 @@ export default function StaircaseWipe({ tone = 'light' }: { tone?: 'light' | 'da
   return (
     <div aria-hidden="true" className="relative">
       <ScrollStage screens={1.8} pullUpVh={tone === 'dark' ? 0.7 : 1}>
-        <div className="camera">
+        <div className="camera wipe-camera">
           {tone === 'light' ? <div className="stair-dim" /> : null}
           <div className="stair" data-tone={tone}>
             {Array.from({ length: 6 }).map((_, i) => (

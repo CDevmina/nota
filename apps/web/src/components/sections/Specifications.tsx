@@ -28,23 +28,28 @@ export default function Specifications({ section }: { section: SpecificationsSec
           </h2>
 
           {section.media?.image ? (
-            <div className="spec-nib pointer-events-none absolute inset-x-0 bottom-0 flex h-[62svh] justify-center">
+            <div className="spec-nib pointer-events-none absolute inset-x-0 bottom-0 z-0 flex h-[62svh] justify-center">
               <SectionMedia media={section.media} className="h-full w-auto object-contain" />
             </div>
           ) : null}
 
-          <div className="relative grid gap-px bg-black/10 md:grid-cols-3">
+          <div className="relative z-10 grid gap-3 md:grid-cols-3">
             {section.groups.map((group, i) => (
               <div
                 key={group.id}
-                className="spec-card bg-white p-5"
+                className="spec-card rounded-lg bg-[#f4f4f4] p-5"
                 style={{ ['--i' as string]: i }}
+                data-frosted={i === 1 ? 'true' : undefined}
               >
                 <h3 className="card-title">{group.title}</h3>
                 <ul className="mt-4 flex flex-col gap-2">
                   {group.items.map((item) => (
-                    <li key={item.id} className="spec-item border-t border-black/10 pt-2">
-                      {item.label}
+                    <li
+                      key={item.id}
+                      className="spec-item flex items-center justify-between gap-3 border-t border-black/10 pt-2"
+                    >
+                      <span>{item.label}</span>
+                      <span aria-hidden="true" className="text-black/25">+</span>
                     </li>
                   ))}
                 </ul>
