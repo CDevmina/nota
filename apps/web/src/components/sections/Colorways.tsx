@@ -34,7 +34,7 @@ export default function Colorways({ section }: { section: ColorwaysSection }) {
                 {item.media?.image ? (
                   <SectionMedia
                     media={item.media}
-                    className="mx-auto max-h-[42svh] w-auto object-contain"
+                    className="mx-auto max-h-[32svh] w-auto object-contain md:max-h-[42svh]"
                   />
                 ) : null}
               </div>
