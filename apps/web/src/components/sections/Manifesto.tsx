@@ -4,7 +4,6 @@ import type { ManifestoSection } from '@/lib/types';
 export default function Manifesto({ section }: { section: ManifestoSection }) {
   return (
     <section
-      data-surface="dark"
       id={section.anchorId ?? undefined}
       className="bg-black py-28 text-white md:py-40"
     >

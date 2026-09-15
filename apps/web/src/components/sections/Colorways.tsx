@@ -8,7 +8,7 @@ import SectionMedia from '../SectionMedia';
  */
 export default function Colorways({ section }: { section: ColorwaysSection }) {
   return (
-    <section id={section.anchorId ?? undefined} data-surface="dark">
+    <section id={section.anchorId ?? undefined}>
       {section.items.map((item, i) => (
         <div key={item.id} className="relative min-h-[100svh]">
           <div

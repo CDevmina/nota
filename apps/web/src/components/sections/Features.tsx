@@ -7,21 +7,20 @@ import SectionMedia from '../SectionMedia';
  */
 export default function Features({ section }: { section: FeaturesSection }) {
   return (
-    <section
-      data-surface="dark" id={section.anchorId ?? undefined} className="bg-black text-white">
+    <section id={section.anchorId ?? undefined} className="bg-black text-white">
       {section.slides.map((slide, i) => (
         <div key={slide.id} className="relative min-h-[100svh]">
-          <div className="camera grid grid-rows-[auto_minmax(0,1fr)_auto] gap-6 p-6 md:p-12">
+          <div className="camera grid grid-rows-[auto_1fr_auto] gap-6 p-6 md:p-12">
             <h3 className="display">
               <span className="block">{slide.headlineTop}</span>
               {slide.headlineMiddle ? <span className="block">{slide.headlineMiddle}</span> : null}
               {slide.headlineBottom ? <span className="block">{slide.headlineBottom}</span> : null}
             </h3>
 
-            <div className="relative min-h-0 overflow-hidden">
+            <div className="relative overflow-hidden">
               <SectionMedia
                 media={slide.media}
-                className="absolute inset-0 h-full w-full object-cover"
+                className="h-full w-full object-contain"
               />
             </div>
 

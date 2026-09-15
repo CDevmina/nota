@@ -4,7 +4,6 @@ import type { AudienceSection } from '@/lib/types';
 export default function Audience({ section }: { section: AudienceSection }) {
   return (
     <section
-      data-surface="dark"
       id={section.anchorId ?? undefined}
       className="bg-black px-6 py-24 text-white md:px-12 md:py-32"
     >

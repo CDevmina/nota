@@ -5,7 +5,6 @@ import SectionMedia from '../SectionMedia';
 export default function Hero({ section }: { section: HeroSection }) {
   return (
     <section
-      data-surface="dark"
       id={section.anchorId ?? undefined}
       className="relative min-h-[100svh] overflow-hidden bg-[#2a2c30]"
     >

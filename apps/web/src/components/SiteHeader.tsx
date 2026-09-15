@@ -1,5 +1,4 @@
 import type { SiteSettings } from '@/lib/types';
-import HeaderTheme from './HeaderTheme';
 import MobileMenu from './MobileMenu';
 import OrderModal from './OrderModal';
 
@@ -15,11 +14,9 @@ export default function SiteHeader({ settings }: { settings: SiteSettings | null
     cta?.price != null ? `${cta.currency ?? '$'}${Number(cta.price).toFixed(0)}` : null;
 
   return (
-    <>
-      <HeaderTheme />
-      <header className="site-header fixed inset-x-0 top-0 z-[100] h-[var(--header-h)]">
-      <div className="header-rule mx-auto flex h-full items-center justify-between gap-6 border-b px-6 md:px-12">
-        <a href="#top" className="display text-[1.6rem] leading-none">
+    <header className="fixed inset-x-0 top-0 z-[100] h-[var(--header-h)]">
+      <div className="mx-auto flex h-full items-center justify-between gap-6 border-b border-white/20 px-6 md:px-12">
+        <a href="#top" className="display text-[1.6rem] leading-none text-white">
           Nōta
         </a>
 
@@ -28,7 +25,7 @@ export default function SiteHeader({ settings }: { settings: SiteSettings | null
             <a
               key={link.id}
               href={link.href}
-              className="label opacity-90 transition-opacity hover:opacity-60"
+              className="label text-white/90 transition-opacity hover:opacity-60"
               {...(link.isExternal ? { target: '_blank', rel: 'noreferrer' } : {})}
             >
               {link.label}
@@ -48,7 +45,6 @@ export default function SiteHeader({ settings }: { settings: SiteSettings | null
           <MobileMenu settings={settings} price={price} />
         </div>
       </div>
-      </header>
-    </>
+    </header>
   );
 }

@@ -4,8 +4,7 @@ import SectionMedia from '../SectionMedia';
 /** Split heading, box render, the long serif paragraph, products and pill tags. */
 export default function InsideBox({ section }: { section: InsideBoxSection }) {
   return (
-    <section
-      data-surface="light" id={section.anchorId ?? undefined} className="bg-white text-black">
+    <section id={section.anchorId ?? undefined} className="bg-white text-black">
       <div className="px-6 py-24 md:px-12 md:py-32">
         <h2 className="display-lg text-center">
           {section.titleTop ? (
