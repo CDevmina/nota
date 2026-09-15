@@ -6,6 +6,7 @@ export default function Transition({ section }: { section: TransitionSection }) 
 
   return (
     <section
+      data-surface={dark ? "dark" : "light"}
       id={section.anchorId ?? undefined}
       className={`grid min-h-[70svh] place-items-center px-6 py-24 md:px-12 ${
         dark ? 'bg-black text-white' : 'bg-white text-black'
