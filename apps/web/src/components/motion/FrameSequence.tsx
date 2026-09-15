@@ -40,7 +40,17 @@ export default function FrameSequence({
 
     const update = () => {
       frame = 0;
-      const p = Number.parseFloat(stage?.style.getPropertyValue('--p') ?? '0') || 0;
+      if (!stage) return;
+
+      // Progress is measured from the stage's own geometry rather than read
+      // back from its --p custom property. Child effects run before parent
+      // ones, so this component's listener is registered first and its frame
+      // callback would otherwise read the value ScrollStage has not written
+      // yet — leaving the sequence a frame behind, or stuck entirely.
+      const rect = stage.getBoundingClientRect();
+      const travel = rect.height - window.innerHeight;
+      const p = travel <= 0 ? 0 : Math.min(Math.max(-rect.top / travel, 0), 1);
+
       setIndex(Math.min(frames.length - 1, Math.round(p * (frames.length - 1))));
     };
 
