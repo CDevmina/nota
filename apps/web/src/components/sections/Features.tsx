@@ -1,49 +1,59 @@
 import type { FeaturesSection } from '@/lib/types';
 import SectionMedia from '../SectionMedia';
+import ScrollStage from '../ScrollStage';
 
 /**
- * Sticky-camera carousel. Each slide is a full-height panel; the camera holds
- * still while the tall parent scrolls, so slides advance without a pin.
+ * Feature carousel — 6 screens, four slides.
+ *
+ * Measured: each slide's image scales 1.4 → 1 as it becomes active and
+ * continues to 0.6 as it leaves, crossfading throughout — a zoom-through, not
+ * a plain fade. At the very end of the section the headline, card and
+ * pagination all fade out together.
  */
 export default function Features({ section }: { section: FeaturesSection }) {
+  const slides = section.slides;
+  if (slides.length === 0) return null;
+
   return (
-    <section id={section.anchorId ?? undefined} className="bg-black text-white">
-      {section.slides.map((slide, i) => (
-        <div key={slide.id} className="relative min-h-[100svh]">
-          <div className="camera grid grid-rows-[auto_1fr_auto] gap-6 p-6 md:p-12">
-            <h3 className="display">
-              <span className="block">{slide.headlineTop}</span>
-              {slide.headlineMiddle ? <span className="block">{slide.headlineMiddle}</span> : null}
-              {slide.headlineBottom ? <span className="block">{slide.headlineBottom}</span> : null}
-            </h3>
+    <section id={section.anchorId ?? undefined} data-surface="dark" className="bg-black text-white">
+      <ScrollStage screens={6} steps={slides.length}>
+        <div className="camera">
+          {slides.map((slide, i) => (
+            <article key={slide.id} data-step={i} className="slide">
+              <div className="absolute inset-0 overflow-hidden">
+                <SectionMedia
+                  media={slide.media}
+                  className="slide-media h-full w-full object-cover opacity-80"
+                />
+              </div>
 
-            <div className="relative overflow-hidden">
-              <SectionMedia
-                media={slide.media}
-                className="h-full w-full object-contain"
-              />
-            </div>
+              <div className="stage-fade-out relative grid h-full grid-rows-[auto_1fr_auto] px-6 pb-16 pt-[calc(var(--header-h)+2rem)] md:px-12">
+                <h3 className="display max-w-4xl text-balance">
+                  <span className="block">{slide.headlineTop}</span>
+                  {slide.headlineMiddle ? <span className="block">{slide.headlineMiddle}</span> : null}
+                  {slide.headlineBottom ? <span className="block">{slide.headlineBottom}</span> : null}
+                </h3>
 
-            <div className="ml-auto max-w-md rounded-sm bg-white/10 p-6 backdrop-blur-md">
-              <h4 className="card-title">{slide.cardTitle}</h4>
-              <p className="spec-item mt-3 text-white/80">{slide.cardBody}</p>
-            </div>
-          </div>
+                <div aria-hidden="true" />
 
-          {/* Segmented progress, one segment per slide. */}
+                <div className="w-full bg-white/10 p-5 backdrop-blur-md md:ml-auto md:w-auto md:max-w-md md:p-6">
+                  <h4 className="card-title">{slide.cardTitle}</h4>
+                  <p className="spec-item mt-3 text-white/85">{slide.cardBody}</p>
+                </div>
+              </div>
+            </article>
+          ))}
+
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute inset-x-0 bottom-4 flex justify-center gap-2"
+            className="stage-fade-out pointer-events-none absolute inset-x-0 bottom-6 flex justify-center gap-2 text-white"
           >
-            {section.slides.map((s, j) => (
-              <span
-                key={s.id}
-                className={`h-[2px] w-10 ${j === i ? 'bg-white' : 'bg-white/30'}`}
-              />
+            {slides.map((s, i) => (
+              <span key={s.id} data-step={i} className="seg" />
             ))}
           </div>
         </div>
-      ))}
+      </ScrollStage>
     </section>
   );
 }

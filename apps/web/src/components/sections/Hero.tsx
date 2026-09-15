@@ -1,26 +1,42 @@
 import type { HeroSection } from '@/lib/types';
 import SectionMedia from '../SectionMedia';
+import ScrollStage from '../ScrollStage';
+import FrameSequence from '../motion/FrameSequence';
+import ScrambleText from '../motion/ScrambleText';
 
-/** Full-bleed pen render with a two-line display headline. */
+/**
+ * Hero — a scroll-scrubbed frame sequence behind a two-line display headline.
+ *
+ * 2.7 screens, matching the reference's `cover` section. The sequence runs its
+ * full length across that scroll; the headline stays put in the camera.
+ */
 export default function Hero({ section }: { section: HeroSection }) {
+  const frames = section.frames ?? [];
+
   return (
     <section
       id={section.anchorId ?? undefined}
-      className="relative min-h-[100svh] overflow-hidden bg-[#2a2c30]"
+      data-surface="dark"
+      className="bg-[#2a2c30]"
     >
-      <div className="absolute inset-0">
-        <SectionMedia
-          media={section.media}
-          priority
-          className="h-full w-full object-cover"
-        />
-      </div>
+      <ScrollStage screens={2.7}>
+        <div className="camera">
+          {frames.length > 1 ? (
+            <FrameSequence
+              frames={frames}
+              alt={section.media?.alt ?? ''}
+              className="absolute inset-0"
+            />
+          ) : (
+            <SectionMedia media={section.media} priority className="h-full w-full object-cover" />
+          )}
 
-      {/* Bottom-left on desktop, centred on mobile — matching the reference. */}
-      <h1 className="display absolute inset-x-0 bottom-[8svh] px-6 text-center text-white md:bottom-16 md:px-12 md:text-left">
-        <span className="block">{section.headlineTop}</span>
-        <span className="block">{section.headlineBottom}</span>
-      </h1>
+          <h1 className="display absolute inset-x-0 bottom-[8svh] px-6 text-center text-white md:bottom-16 md:px-12 md:text-left">
+            <ScrambleText as="div" text={section.headlineTop} />
+            <ScrambleText as="div" text={section.headlineBottom} delayMs={140} />
+          </h1>
+        </div>
+      </ScrollStage>
     </section>
   );
 }

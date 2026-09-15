@@ -113,3 +113,224 @@ body {
     min-height: 100svh;
   }
 }
+
+/* ======================================================================
+   Scroll choreography — desktop only (≥992px)
+   Every value below comes from docs/reference-behaviour-spec.md, measured
+   off the reference at 1440x900. Below 992px the reference ships separate
+   markup with no cameras and no animation, so all of this collapses.
+   ====================================================================== */
+
+.scroll-stage {
+  --p: 0;
+  height: auto;
+}
+
+.camera {
+  position: relative;
+  min-height: 100svh;
+}
+
+@media (min-width: 992px) {
+  .scroll-stage {
+    height: calc(var(--screens, 2) * 100svh);
+    margin-top: calc(var(--pull-up, 0) * -100svh);
+  }
+
+  .camera {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    min-height: 0;
+    overflow: hidden;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-stage {
+    height: auto;
+    margin-top: 0;
+  }
+  .camera {
+    position: relative;
+    height: auto;
+    min-height: 100svh;
+  }
+}
+
+/* ---- staircase wipe: 6 columns, translateY(100%) -> 0, staggered ------ */
+.stair {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+}
+
+.stair-panel {
+  background: var(--white);
+  /* Column i starts at i * 0.1 of progress and takes 0.5 to arrive, which
+     reproduces the measured finish points of 0.5, 0.6, 0.7, 0.8, 0.9, 1.0. */
+  translate: 0 calc(100% - clamp(0%, (var(--p) - var(--i) * 0.1) * 200%, 100%));
+}
+
+.stair-dim {
+  position: absolute;
+  inset: 0;
+  background: var(--black);
+  opacity: clamp(0, calc(var(--p) * 0.75), 0.75);
+}
+
+/* ---- circular mask: scale(0) -> scale(4.5), eased, done by p=0.8 ------ */
+.disc {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 40svh;
+  height: 40svh;
+  margin: -20svh 0 0 -20svh;
+  border-radius: 50%;
+  background: var(--white);
+  scale: clamp(0, calc(var(--p) * 1.25 * 4.5), 4.5);
+}
+
+/* ---- specifications: measured translate distances --------------------- */
+.spec-head {
+  translate: 0 calc(269px * (1 - clamp(0, var(--p) * 4, 1)));
+  opacity: clamp(0, calc(var(--p) * 4), 1);
+}
+
+.spec-nib {
+  translate: 0 calc(728px * (1 - clamp(0, var(--p) * 1.6, 1)));
+}
+
+.spec-card {
+  /* Cards begin after p=0.25 and finish together at p=1, staggered by index. */
+  translate: 0
+    calc(419px * (1 - clamp(0, (var(--p) - 0.25 - var(--i) * 0.08) * 2.2, 1)));
+}
+
+/* ---- manifesto: per character, #666666 -> #ffffff over first 17% ------ */
+.scrub-char {
+  color: color-mix(
+    in srgb,
+    #ffffff calc((var(--p) / 0.17 * var(--chars) - var(--i)) * 100%),
+    #666666
+  );
+}
+
+/* ---- carousel: image scales 1.4 -> 1 -> 0.6 while crossfading --------- */
+.slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.45s ease;
+}
+
+.slide-media {
+  scale: 1.4;
+  transition: scale 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.scroll-stage[data-index='0'] .slide[data-step='0'],
+.scroll-stage[data-index='1'] .slide[data-step='1'],
+.scroll-stage[data-index='2'] .slide[data-step='2'],
+.scroll-stage[data-index='3'] .slide[data-step='3'],
+.scroll-stage[data-index='4'] .slide[data-step='4'] {
+  opacity: 1;
+}
+
+.scroll-stage[data-index='0'] .slide[data-step='0'] .slide-media,
+.scroll-stage[data-index='1'] .slide[data-step='1'] .slide-media,
+.scroll-stage[data-index='2'] .slide[data-step='2'] .slide-media,
+.scroll-stage[data-index='3'] .slide[data-step='3'] .slide-media,
+.scroll-stage[data-index='4'] .slide[data-step='4'] .slide-media {
+  scale: 1;
+}
+
+/* A slide already passed shrinks away rather than resetting to 1.4. */
+.slide[data-past='true'] .slide-media {
+  scale: 0.6;
+}
+
+/* Headings and pagination fade out at the very end of the carousel. */
+.stage-fade-out {
+  opacity: clamp(0, calc((0.94 - var(--p)) * 16), 1);
+}
+
+.seg {
+  height: 2px;
+  width: 40px;
+  background: currentColor;
+  opacity: 0.3;
+  transition: opacity 0.4s ease;
+}
+
+.scroll-stage[data-index='0'] .seg[data-step='0'],
+.scroll-stage[data-index='1'] .seg[data-step='1'],
+.scroll-stage[data-index='2'] .seg[data-step='2'],
+.scroll-stage[data-index='3'] .seg[data-step='3'],
+.scroll-stage[data-index='4'] .seg[data-step='4'] {
+  opacity: 1;
+}
+
+/* ---- below 992px, and under reduced motion, nothing animates ---------- */
+@media (max-width: 991px), (prefers-reduced-motion: reduce) {
+  .stair,
+  .stair-dim,
+  .disc {
+    display: none;
+  }
+
+  .spec-head,
+  .spec-nib,
+  .spec-card {
+    translate: none;
+    opacity: 1;
+  }
+
+  .scrub-char {
+    color: #ffffff;
+  }
+
+  .slide {
+    position: relative;
+    opacity: 1;
+    transition: none;
+  }
+
+  .slide-media {
+    scale: 1;
+    transition: none;
+  }
+
+  .stage-fade-out {
+    opacity: 1;
+  }
+}
+
+/* ---- header colour inversion (desktop only, like the reference) ------- */
+:root {
+  --header-ink: var(--white);
+  --header-rule: rgb(255 255 255 / 0.2);
+}
+
+.header-on-light {
+  --header-ink: var(--black);
+  --header-rule: rgb(0 0 0 / 0.12);
+}
+
+.site-header {
+  color: var(--header-ink);
+  transition: color 0.35s ease;
+}
+
+.site-header .header-rule {
+  border-color: var(--header-rule);
+  transition: border-color 0.35s ease;
+}
+
+/* Anchor targets must clear the fixed header when jumped to. */
+[id] {
+  scroll-margin-top: var(--header-h);
+}

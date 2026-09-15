@@ -1,3 +1,4 @@
+import React from 'react';
 import type { Section } from '@/lib/types';
 
 import Preloader from './sections/Preloader';
@@ -9,6 +10,8 @@ import Transition from './sections/Transition';
 import Features from './sections/Features';
 import InsideBox from './sections/InsideBox';
 import Colorways from './sections/Colorways';
+import StaircaseWipe from './motion/StaircaseWipe';
+import CircleReveal from './motion/CircleReveal';
 
 /**
  * Resolves each dynamic-zone entry to its React component by `__component`.
@@ -37,10 +40,29 @@ const REGISTRY: Registry = {
   'sections.colorways': Colorways,
 };
 
+/**
+ * Which ground each section renders on. The reference puts a full-viewport wipe
+ * at every dark-to-light hand-over; inserting them from this map rather than
+ * between named sections means reordering the dynamic zone keeps them correct.
+ */
+const SURFACE: Record<Section['__component'], 'light' | 'dark'> = {
+  'sections.preloader': 'dark',
+  'sections.hero': 'dark',
+  'sections.specifications': 'light',
+  'sections.manifesto': 'dark',
+  'sections.audience': 'dark',
+  'sections.transition': 'light',
+  'sections.features': 'dark',
+  'sections.inside-box': 'light',
+  'sections.colorways': 'dark',
+};
+
 export default function SectionRenderer({ sections }: { sections: Section[] }) {
+  // The reference alternates its two hand-over devices down the page.
+  let crossings = 0;
   return (
     <>
-      {sections.map((section) => {
+      {sections.map((section, index) => {
         // Each entry is correctly typed in the registry; the lookup is the one
         // place the union collapses, so widen it back to the union here.
         const Component = REGISTRY[section.__component] as React.ComponentType<{
@@ -56,7 +78,24 @@ export default function SectionRenderer({ sections }: { sections: Section[] }) {
           return null;
         }
 
-        return <Component key={`${section.__component}-${section.id}`} section={section} />;
+        const previous = sections[index - 1];
+        const entersLight =
+          previous &&
+          SURFACE[previous.__component] === 'dark' &&
+          SURFACE[section.__component] === 'light';
+
+        let handover: React.ReactNode = null;
+        if (entersLight) {
+          handover = crossings % 2 === 0 ? <StaircaseWipe /> : <CircleReveal />;
+          crossings += 1;
+        }
+
+        return (
+          <React.Fragment key={`${section.__component}-${section.id}`}>
+            {handover}
+            <Component section={section} />
+          </React.Fragment>
+        );
       })}
     </>
   );

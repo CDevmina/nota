@@ -99,6 +99,8 @@ export interface HeroSection extends SectionBase {
   headlineTop: string;
   headlineBottom: string;
   media: Media | null;
+  /** Scroll-scrubbed sequence, in order. Empty falls back to the still image. */
+  frames: StrapiImage[];
 }
 
 export interface SpecificationsSection extends SectionBase {

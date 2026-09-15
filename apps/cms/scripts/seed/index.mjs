@@ -142,6 +142,8 @@ async function uploadMedia() {
 
 /* ---------------------------------------------------------------- shaping */
 
+const MULTI_MEDIA_FIELDS = ['frames'];
+
 const MEDIA_FIELDS = [
   'image',
   'mobileImage',
@@ -170,6 +172,13 @@ function resolveMedia(value, media) {
   let missingRequiredImage = false;
 
   for (const [key, raw] of Object.entries(value)) {
+    // A multiple-media field: an array of filenames becomes an array of ids,
+    // dropping any that were never uploaded rather than sending nulls.
+    if (Array.isArray(raw) && MULTI_MEDIA_FIELDS.includes(key)) {
+      out[key] = raw.map((name) => media.get(name)).filter((id) => id !== undefined);
+      continue;
+    }
+
     if (typeof raw === 'string' && MEDIA_FIELDS.includes(key)) {
       const id = media.get(raw);
       if (id === undefined) {

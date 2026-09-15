@@ -82,12 +82,30 @@ export const homepage = {
       anchorId: 'top',
       headlineTop: 'Smart pen',
       headlineBottom: 'for real thinking',
+      // 75 frames extracted from the reference's Lottie, scrubbed by scroll.
+      // frame = round(progress * 74).
+      frames: [
+        'hero-frame-00.webp', 'hero-frame-01.webp', 'hero-frame-02.webp', 'hero-frame-03.webp', 'hero-frame-04.webp',
+        'hero-frame-05.webp', 'hero-frame-06.webp', 'hero-frame-07.webp', 'hero-frame-08.webp', 'hero-frame-09.webp',
+        'hero-frame-10.webp', 'hero-frame-11.webp', 'hero-frame-12.webp', 'hero-frame-13.webp', 'hero-frame-14.webp',
+        'hero-frame-15.webp', 'hero-frame-16.webp', 'hero-frame-17.webp', 'hero-frame-18.webp', 'hero-frame-19.webp',
+        'hero-frame-20.webp', 'hero-frame-21.webp', 'hero-frame-22.webp', 'hero-frame-23.webp', 'hero-frame-24.webp',
+        'hero-frame-25.webp', 'hero-frame-26.webp', 'hero-frame-27.webp', 'hero-frame-28.webp', 'hero-frame-29.webp',
+        'hero-frame-30.webp', 'hero-frame-31.webp', 'hero-frame-32.webp', 'hero-frame-33.webp', 'hero-frame-34.webp',
+        'hero-frame-35.webp', 'hero-frame-36.webp', 'hero-frame-37.webp', 'hero-frame-38.webp', 'hero-frame-39.webp',
+        'hero-frame-40.webp', 'hero-frame-41.webp', 'hero-frame-42.webp', 'hero-frame-43.webp', 'hero-frame-44.webp',
+        'hero-frame-45.webp', 'hero-frame-46.webp', 'hero-frame-47.webp', 'hero-frame-48.webp', 'hero-frame-49.webp',
+        'hero-frame-50.webp', 'hero-frame-51.webp', 'hero-frame-52.webp', 'hero-frame-53.webp', 'hero-frame-54.webp',
+        'hero-frame-55.webp', 'hero-frame-56.webp', 'hero-frame-57.webp', 'hero-frame-58.webp', 'hero-frame-59.webp',
+        'hero-frame-60.webp', 'hero-frame-61.webp', 'hero-frame-62.webp', 'hero-frame-63.webp', 'hero-frame-64.webp',
+        'hero-frame-65.webp', 'hero-frame-66.webp', 'hero-frame-67.webp', 'hero-frame-68.webp', 'hero-frame-69.webp',
+        'hero-frame-70.webp', 'hero-frame-71.webp', 'hero-frame-72.webp', 'hero-frame-73.webp', 'hero-frame-74.webp',
+      ],
       media: {
-        image: 'hero-pen-mobile.png',
+        image: 'hero-frame-00.webp',
         alt: 'The NŌTA smart pen, nib downward, on a grey gradient',
         mobileImage: 'hero-pen-mobile.png',
-        video: 'hero-pen.mp4',
-        poster: 'hero-pen-mobile.png',
+        poster: 'hero-frame-00.webp',
       },
     },
 

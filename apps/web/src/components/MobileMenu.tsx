@@ -32,7 +32,7 @@ export default function MobileMenu({
         className="grid h-10 w-10 grid-cols-3 place-content-center gap-[3px] p-2"
       >
         {Array.from({ length: 9 }).map((_, i) => (
-          <span key={i} className="h-[3px] w-[3px] rounded-full bg-white" />
+          <span key={i} className="h-[3px] w-[3px] rounded-full bg-current" />
         ))}
       </button>
 
