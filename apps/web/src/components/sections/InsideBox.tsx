@@ -1,6 +1,5 @@
 import type { InsideBoxSection } from '@/lib/types';
 import SectionMedia from '../SectionMedia';
-import BlindReveal from '../motion/BlindReveal';
 
 /** Split heading, box render, the long serif paragraph, products and pill tags. */
 export default function InsideBox({ section }: { section: InsideBoxSection }) {
@@ -18,9 +17,8 @@ export default function InsideBox({ section }: { section: InsideBoxSection }) {
         </h2>
 
         {section.boxMedia?.image ? (
-          <div className="relative mx-auto mt-16 max-w-5xl overflow-hidden bg-[#f1f1f1]">
+          <div className="mx-auto mt-16 max-w-5xl overflow-hidden bg-[#f1f1f1]">
             <SectionMedia media={section.boxMedia} className="h-auto w-full object-cover" />
-            <BlindReveal />
           </div>
         ) : null}
 
