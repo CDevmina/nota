@@ -361,3 +361,21 @@ body {
     display: none;
   }
 }
+
+/* Black curtains hand over from a light section into a dark one. */
+.stair[data-tone='dark'] .stair-panel {
+  background: var(--black);
+}
+
+/* ---- details cards: scale 1.3 -> 1 while fading in, measured ---------- */
+.detail-card {
+  opacity: clamp(0, calc((var(--p) - 0.35) * 4), 1);
+  scale: clamp(1, calc(1.3 - (var(--p) - 0.35) * 1.2), 1.3);
+}
+
+@media (max-width: 991px), (prefers-reduced-motion: reduce) {
+  .detail-card {
+    opacity: 1;
+    scale: 1;
+  }
+}
