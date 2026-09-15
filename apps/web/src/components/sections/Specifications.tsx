@@ -28,8 +28,8 @@ export default function Specifications({ section }: { section: SpecificationsSec
           </h2>
 
           {section.media?.image ? (
-            <div className="spec-nib pointer-events-none absolute inset-x-0 bottom-0 flex justify-center">
-              <SectionMedia media={section.media} className="max-h-[46svh] w-auto object-contain" />
+            <div className="spec-nib pointer-events-none absolute inset-x-0 bottom-0 flex h-[62svh] justify-center">
+              <SectionMedia media={section.media} className="h-full w-auto object-contain" />
             </div>
           ) : null}
 

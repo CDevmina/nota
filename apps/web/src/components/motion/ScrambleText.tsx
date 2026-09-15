@@ -86,7 +86,10 @@ export default function ScrambleText({
     <Tag
       ref={ref as React.Ref<HTMLSpanElement & HTMLDivElement>}
       className={className}
-      style={{ display: 'inline-block' }}
+      // A div line is block so consecutive lines stack; a span stays inline so
+      // it can sit inside running text. Both were inline-block, which ran the
+      // two hero lines together into "Smart penfor real thinking".
+      style={{ display: Tag === 'div' ? 'block' : 'inline-block' }}
     >
       {text}
     </Tag>
