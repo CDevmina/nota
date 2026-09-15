@@ -1,13 +1,11 @@
 import type { AudienceSection } from '@/lib/types';
-import Reveal from '../Reveal';
 
 /** Who it's for — intro paragraphs, then blocks each indented further right. */
 export default function Audience({ section }: { section: AudienceSection }) {
   return (
     <section
-      data-surface="dark"
       id={section.anchorId ?? undefined}
-      className="bg-black px-6 pb-24 pt-[calc(var(--header-h)+4rem)] text-white md:px-12 md:pb-32"
+      className="bg-black px-6 py-24 text-white md:px-12 md:py-32"
     >
       {section.label ? (
         <p className="label uppercase tracking-wide text-white/70">{section.label}</p>
@@ -23,8 +21,8 @@ export default function Audience({ section }: { section: AudienceSection }) {
 
       <div className="mt-20 flex flex-col gap-14">
         {section.items.map((item) => (
-          <Reveal key={item.id} delayMs={(item.indentLevel ?? 0) * 90}>
           <article
+            key={item.id}
             className="md:max-w-2xl"
             // The reference steps each block further right than the last.
             style={{ marginInlineStart: `min(${(item.indentLevel ?? 0) * 8}vw, 33%)` }}
@@ -32,7 +30,6 @@ export default function Audience({ section }: { section: AudienceSection }) {
             <h3 className="card-title">{item.title}</h3>
             <p className="spec-item mt-4 indent-16 text-white/80">{item.body}</p>
           </article>
-          </Reveal>
         ))}
       </div>
     </section>
