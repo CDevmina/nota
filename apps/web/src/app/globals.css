@@ -113,3 +113,32 @@ body {
     min-height: 100svh;
   }
 }
+
+/* ---- header colour inversion ---------------------------------------- */
+/*
+ * The header sits over both black and white sections. HeaderTheme toggles
+ * .header-on-light on <html> based on the section currently beneath it, and
+ * everything in the header reads its colour from this one variable.
+ */
+:root {
+  --header-ink: var(--white);
+  --header-rule: rgb(255 255 255 / 0.2);
+}
+
+.header-on-light {
+  --header-ink: var(--black);
+  --header-rule: rgb(0 0 0 / 0.12);
+}
+
+.site-header {
+  color: var(--header-ink);
+  transition: color 0.35s ease;
+}
+
+.site-header .header-rule {
+  border-color: var(--header-rule);
+  transition: border-color 0.35s ease;
+}
+
+/* The Order pill stays a black pill on a white card in both themes — on the
+   reference it never inverts, because it is the one persistent call to action. */
