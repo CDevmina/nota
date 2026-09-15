@@ -29,13 +29,21 @@ export default function Colorways({ section }: { section: ColorwaysSection }) {
               style={
                 {
                   background: `linear-gradient(180deg, ${item.gradientStart} 0%, ${item.gradientEnd} 100%)`,
+                  // the render carries its own gradient; the CSS one only shows
+                  // through in the margins around it
                   color: item.textColor,
                   '--i': i,
                   '--last': items.length - 1,
                 } as CSSProperties
               }
             >
-              {/* The pen is the centre column; the headline flanks it. */}
+              {/* The colourway renders are full scenes — the pen already sits on
+                  its own gradient — so the image is the background and the
+                  headline is overlaid, rather than the pen being a column. */}
+              {item.media?.image ? (
+                <SectionMedia media={item.media} className="colorway-scene" />
+              ) : null}
+
               <div className="colorway-grid">
                 <h2
                   className="slide-trail display colorway-name"
@@ -44,14 +52,7 @@ export default function Colorways({ section }: { section: ColorwaysSection }) {
                   {item.name}
                 </h2>
 
-                {item.media?.image ? (
-                  <SectionMedia
-                    media={item.media}
-                    className="colorway-pen h-full w-auto object-contain"
-                  />
-                ) : (
-                  <div aria-hidden="true" />
-                )}
+                <div aria-hidden="true" />
 
                 <h2
                   className="slide-trail display colorway-tagline"

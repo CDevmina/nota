@@ -90,11 +90,15 @@ export default function ScrubReveal({
         } as React.CSSProperties
       }
     >
-      {chars.map((char, i) => (
-        <span key={i} className="scrub-char" style={{ ['--i' as string]: i }} aria-hidden={i > 0}>
-          {char}
-        </span>
-      ))}
+      {chars.map((char, i) =>
+        char === ' ' ? (
+          ' '
+        ) : (
+          <span key={i} className="scrub-char" style={{ ['--i' as string]: i }} aria-hidden>
+            {char}
+          </span>
+        ),
+      )}
       <span className="sr-only">{text}</span>
     </p>
   );
