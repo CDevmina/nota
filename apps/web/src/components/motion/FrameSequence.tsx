@@ -36,6 +36,7 @@ export default function FrameSequence({
   const imgRefs = useRef<(HTMLImageElement | null)[]>([]);
   const shownRef = useRef(0);
   const [animated, setAnimated] = useState(false);
+  const [ready, setReady] = useState(false);
 
   // Decided once, before any scrolling: whether this viewport animates at all.
   useEffect(() => {
@@ -52,9 +53,31 @@ export default function FrameSequence({
     };
   }, []);
 
+  // Every frame is decoded before scrubbing begins. Without this the sequence
+  // jumps to a frame the browser has fetched but not yet decoded, and paints
+  // nothing — which reads as black flashes through the animation.
+  useEffect(() => {
+    if (!animated || frames.length < 2) return;
+    let cancelled = false;
+
+    Promise.allSettled(
+      frames.map((f) => {
+        const img = new Image();
+        img.src = f.url;
+        return img.decode === undefined ? Promise.resolve() : img.decode();
+      }),
+    ).then(() => {
+      if (!cancelled) setReady(true);
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [animated, frames]);
+
   useEffect(() => {
     const host = hostRef.current;
-    if (!host || !animated || frames.length < 2) return;
+    if (!host || !animated || !ready || frames.length < 2) return;
 
     const stage = host.closest<HTMLElement>('.scroll-stage');
     if (!stage) return;
@@ -91,7 +114,7 @@ export default function FrameSequence({
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onScroll);
     };
-  }, [animated, frames.length]);
+  }, [animated, ready, frames.length]);
 
   if (frames.length === 0) return null;
 
