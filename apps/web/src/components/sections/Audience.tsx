@@ -7,7 +7,7 @@ export default function Audience({ section }: { section: AudienceSection }) {
     <section
       data-surface="dark"
       id={section.anchorId ?? undefined}
-      className="bg-black px-6 py-24 text-white md:px-12 md:py-32"
+      className="bg-black px-6 pb-24 pt-[calc(var(--header-h)+4rem)] text-white md:px-12 md:pb-32"
     >
       {section.label ? (
         <p className="label uppercase tracking-wide text-white/70">{section.label}</p>

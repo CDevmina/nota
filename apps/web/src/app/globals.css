@@ -262,3 +262,24 @@ body {
     transition: none;
   }
 }
+
+/* ---- header clearance ------------------------------------------------ */
+/*
+ * The header is fixed and the cameras are full-height, so anything starting at
+ * the top of a stage renders underneath it. Cameras reserve the header's height
+ * rather than every section guessing at it.
+ */
+.camera {
+  padding-top: var(--header-h);
+}
+
+/* Anchor targets must clear the fixed header when jumped to. */
+[id] {
+  scroll-margin-top: var(--header-h);
+}
+
+/* Crossfades settle faster than the default so a scroll that crosses two
+   steps does not leave both legible at once. */
+.stage-slide {
+  transition: opacity 0.4s ease, visibility 0.4s;
+}
