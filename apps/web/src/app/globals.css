@@ -219,38 +219,41 @@ body {
   );
 }
 
-/* ---- carousel: image scales 1.4 -> 1 -> 0.6 while crossfading --------- */
+/* ---- stepped sections: continuous, scroll-linked, no transitions -------
+ *
+ * The reference does not step between slides. Sampling it mid-scroll caught
+ * opacity at 0.5564 / 0.7512 / 0.4436 and scale at 1.3557 / 0.9557 — those are
+ * functions of scroll position, not midpoints of a timed transition.
+ *
+ * For slide i of n, with the stage progress p:
+ *     t = p * (n - 1) - i
+ * so a slide is fully active at t = 0 and its neighbours sit at t = ±1.
+ *
+ *     opacity = 1 - |t|      linear crossfade, summing to 1 between neighbours
+ *     scale   = 1 - 0.4t     1.4 entering, 1 active, 0.6 leaving
+ *
+ * |t| is expressed as min() of two clamps because abs() is not safe to rely on
+ * yet. Nothing here transitions: the value *is* the scroll position, so motion
+ * tracks the wheel exactly and reverses precisely on the way back up.
+ */
 .slide {
   position: absolute;
   inset: 0;
-  opacity: 0;
-  transition: opacity 0.45s ease;
+  --t: calc(var(--p) * var(--last) - var(--i));
+  opacity: min(clamp(0, calc(var(--t) + 1), 1), clamp(0, calc(1 - var(--t)), 1));
+  will-change: opacity;
 }
 
 .slide-media {
-  scale: 1.4;
-  transition: scale 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  scale: clamp(0.6, calc(1 - 0.4 * var(--t)), 1.4);
+  will-change: scale;
 }
 
-.scroll-stage[data-index='0'] .slide[data-step='0'],
-.scroll-stage[data-index='1'] .slide[data-step='1'],
-.scroll-stage[data-index='2'] .slide[data-step='2'],
-.scroll-stage[data-index='3'] .slide[data-step='3'],
-.scroll-stage[data-index='4'] .slide[data-step='4'] {
-  opacity: 1;
-}
-
-.scroll-stage[data-index='0'] .slide[data-step='0'] .slide-media,
-.scroll-stage[data-index='1'] .slide[data-step='1'] .slide-media,
-.scroll-stage[data-index='2'] .slide[data-step='2'] .slide-media,
-.scroll-stage[data-index='3'] .slide[data-step='3'] .slide-media,
-.scroll-stage[data-index='4'] .slide[data-step='4'] .slide-media {
-  scale: 1;
-}
-
-/* A slide already passed shrinks away rather than resetting to 1.4. */
-.slide[data-past='true'] .slide-media {
-  scale: 0.6;
+/* Colourways: the reference offsets the headline behind the background, so the
+   incoming image reaches full opacity while the outgoing headline still fades. */
+.slide-trail {
+  --t: calc(var(--p) * var(--last) - var(--i) + 0.18);
+  opacity: min(clamp(0, calc(var(--t) + 1), 1), clamp(0, calc(1 - var(--t)), 1));
 }
 
 /* Headings and pagination fade out at the very end of the carousel. */
@@ -258,20 +261,15 @@ body {
   opacity: clamp(0, calc((0.94 - var(--p)) * 16), 1);
 }
 
+/* Segments track the same continuous value rather than snapping on a class. */
 .seg {
   height: 2px;
   width: 40px;
   background: currentColor;
-  opacity: 0.3;
-  transition: opacity 0.4s ease;
-}
-
-.scroll-stage[data-index='0'] .seg[data-step='0'],
-.scroll-stage[data-index='1'] .seg[data-step='1'],
-.scroll-stage[data-index='2'] .seg[data-step='2'],
-.scroll-stage[data-index='3'] .seg[data-step='3'],
-.scroll-stage[data-index='4'] .seg[data-step='4'] {
-  opacity: 1;
+  --t: calc(var(--p) * var(--last) - var(--i));
+  opacity: calc(
+    0.3 + 0.7 * min(clamp(0, calc(var(--t) + 1), 1), clamp(0, calc(1 - var(--t)), 1))
+  );
 }
 
 /* ---- below 992px, and under reduced motion, nothing animates ---------- */

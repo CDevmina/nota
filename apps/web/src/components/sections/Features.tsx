@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react';
 import type { FeaturesSection } from '@/lib/types';
 import SectionMedia from '../SectionMedia';
 import ScrollStage from '../ScrollStage';
@@ -16,10 +17,14 @@ export default function Features({ section }: { section: FeaturesSection }) {
 
   return (
     <section id={section.anchorId ?? undefined} data-surface="dark" className="bg-black text-white">
-      <ScrollStage screens={6} steps={slides.length}>
+      <ScrollStage screens={6}>
         <div className="camera">
           {slides.map((slide, i) => (
-            <article key={slide.id} data-step={i} className="slide">
+            <article
+              key={slide.id}
+              className="slide"
+              style={{ ["--i"]: i, ["--last"]: slides.length - 1 } as CSSProperties}
+            >
               <div className="absolute inset-0 overflow-hidden">
                 <SectionMedia
                   media={slide.media}
@@ -49,7 +54,11 @@ export default function Features({ section }: { section: FeaturesSection }) {
             className="stage-fade-out pointer-events-none absolute inset-x-0 bottom-6 flex justify-center gap-2 text-white"
           >
             {slides.map((s, i) => (
-              <span key={s.id} data-step={i} className="seg" />
+              <span
+                key={s.id}
+                className="seg"
+                style={{ ["--i"]: i, ["--last"]: slides.length - 1 } as CSSProperties}
+              />
             ))}
           </div>
         </div>

@@ -6,14 +6,22 @@ import type { StrapiImage } from '@/lib/types';
 /**
  * A scroll-scrubbed image sequence — the reference's hero, rebuilt.
  *
- * The reference ships this as a Lottie containing 75 embedded WebP frames,
- * played by setting the frame index from scroll and never running the clip:
- * measured, `frame = round(progress * 75)`, exactly linear. Rendering the
- * frames ourselves costs one <img> swap instead of 1.7MB of JSON plus the
- * Lottie runtime, and each frame caches normally.
+ * The reference ships this as a Lottie carrying 75 embedded WebP frames, played
+ * by setting the frame index from scroll and never running the clip: measured,
+ * `frame = round(progress * 75)`, exactly linear.
  *
- * Below 992px the reference freezes its sequence on frame 0 and never moves it.
- * We do the same, so a phone pays for one image rather than seventy-five.
+ * Two things matter for this to feel smooth:
+ *
+ * 1. Nothing goes through React state while scrolling. Swapping the visible
+ *    frame is two `style.display` writes against refs; driving it through
+ *    `setState` re-rendered all seventy-five elements every frame, which is
+ *    what made the hero stutter.
+ * 2. Progress is measured from the stage's own geometry rather than read back
+ *    from its `--p` property. Child effects mount before parent ones, so this
+ *    component's callback runs before ScrollStage has written that value.
+ *
+ * Below 992px the reference freezes its sequence on frame 0, so only the first
+ * frame is rendered at all and a phone never downloads the other seventy-four.
  */
 export default function FrameSequence({
   frames,
@@ -24,34 +32,49 @@ export default function FrameSequence({
   alt: string;
   className?: string;
 }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [index, setIndex] = useState(0);
+  const hostRef = useRef<HTMLDivElement>(null);
+  const imgRefs = useRef<(HTMLImageElement | null)[]>([]);
+  const shownRef = useRef(0);
   const [animated, setAnimated] = useState(false);
 
+  // Decided once, before any scrolling: whether this viewport animates at all.
   useEffect(() => {
-    const el = ref.current;
-    if (!el || frames.length < 2) return;
-
     const desktop = window.matchMedia('(min-width: 992px)');
     const still = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const stage = el.closest<HTMLElement>('.scroll-stage');
+    const decide = () => setAnimated(desktop.matches && !still.matches);
+
+    decide();
+    desktop.addEventListener('change', decide);
+    still.addEventListener('change', decide);
+    return () => {
+      desktop.removeEventListener('change', decide);
+      still.removeEventListener('change', decide);
+    };
+  }, []);
+
+  useEffect(() => {
+    const host = hostRef.current;
+    if (!host || !animated || frames.length < 2) return;
+
+    const stage = host.closest<HTMLElement>('.scroll-stage');
+    if (!stage) return;
 
     let frame = 0;
 
     const update = () => {
       frame = 0;
-      if (!stage) return;
-
-      // Progress is measured from the stage's own geometry rather than read
-      // back from its --p custom property. Child effects run before parent
-      // ones, so this component's listener is registered first and its frame
-      // callback would otherwise read the value ScrollStage has not written
-      // yet — leaving the sequence a frame behind, or stuck entirely.
       const rect = stage.getBoundingClientRect();
       const travel = rect.height - window.innerHeight;
       const p = travel <= 0 ? 0 : Math.min(Math.max(-rect.top / travel, 0), 1);
+      const next = Math.min(frames.length - 1, Math.round(p * (frames.length - 1)));
 
-      setIndex(Math.min(frames.length - 1, Math.round(p * (frames.length - 1))));
+      if (next === shownRef.current) return;
+
+      const previous = imgRefs.current[shownRef.current];
+      const incoming = imgRefs.current[next];
+      if (previous) previous.style.display = 'none';
+      if (incoming) incoming.style.display = 'block';
+      shownRef.current = next;
     };
 
     const onScroll = () => {
@@ -59,50 +82,45 @@ export default function FrameSequence({
       frame = requestAnimationFrame(update);
     };
 
-    const apply = () => {
-      const on = desktop.matches && !still.matches;
-      setAnimated(on);
-      window.removeEventListener('scroll', onScroll);
-      if (!on) {
-        setIndex(0);
-        return;
-      }
-      window.addEventListener('scroll', onScroll, { passive: true });
-      update();
-    };
-
-    apply();
-    desktop.addEventListener('change', apply);
-    still.addEventListener('change', apply);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    update();
 
     return () => {
       if (frame) cancelAnimationFrame(frame);
       window.removeEventListener('scroll', onScroll);
-      desktop.removeEventListener('change', apply);
-      still.removeEventListener('change', apply);
+      window.removeEventListener('resize', onScroll);
     };
-  }, [frames.length]);
+  }, [animated, frames.length]);
 
   if (frames.length === 0) return null;
 
+  // Only the first frame exists until we know this viewport animates, so a
+  // phone downloads one image instead of seventy-five.
+  const rendered = animated ? frames : frames.slice(0, 1);
+
   return (
-    <div ref={ref} className={className}>
-      {/* Every frame is in the DOM but only the current one is painted.
-          Toggling visibility beats swapping one img's src, which flashes
-          empty on each change until the new frame decodes. */}
-      {frames.map((f, i) => (
+    <div ref={hostRef} className={className}>
+      {rendered.map((f, i) => (
         <img
           key={f.url}
+          ref={(el) => {
+            imgRefs.current[i] = el;
+          }}
           src={f.url}
           alt={i === 0 ? alt : ''}
           aria-hidden={i === 0 ? undefined : true}
           width={f.width}
           height={f.height}
-          loading={i === 0 ? 'eager' : 'lazy'}
+          // Frame 0 is the LCP candidate. The rest are fetched at low priority
+          // so they are decoded and ready before the sequence reaches them —
+          // lazy loading would leave gaps during a fast scroll.
+          loading="eager"
           fetchPriority={i === 0 ? 'high' : 'low'}
           decoding="async"
+          draggable={false}
           className="absolute inset-0 h-full w-full object-cover"
-          style={{ display: i === index || (!animated && i === 0) ? 'block' : 'none' }}
+          style={{ display: i === 0 ? 'block' : 'none' }}
         />
       ))}
     </div>
