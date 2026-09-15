@@ -255,7 +255,13 @@ body {
   position: absolute;
   inset: 0;
   --t: calc(var(--p) * var(--last) - var(--i));
-  opacity: min(clamp(0, calc(var(--t) + 1), 1), clamp(0, calc(1 - var(--t)), 1));
+  /*
+   * Fade IN only, and stay. A slide is painted over by every later one, so it
+   * never needs to fade out — and it must not, because two half-transparent
+   * gradients blend rather than cross over. That blend is what put a purple
+   * frame between Mist Blue and Precision Red.
+   */
+  opacity: clamp(0, calc(var(--t) + 1), 1);
   will-change: opacity;
 }
 
@@ -264,11 +270,21 @@ body {
   will-change: scale;
 }
 
-/* Colourways: the reference offsets the headline behind the background, so the
-   incoming image reaches full opacity while the outgoing headline still fades. */
+/*
+ * Colourways headline. The reference offsets it behind the background, so the
+ * incoming scene reaches full opacity while the outgoing words are still
+ * going, and the words blur as they swap rather than simply cross-dissolving —
+ * without the blur both labels stay readable at once and you get "PrecMist
+ * Blue."
+ *
+ * Unlike the scene, a headline DOES have to fade out: the words differ per
+ * state and would otherwise pile up.
+ */
 .slide-trail {
   --t: calc(var(--p) * var(--last) - var(--i) + 0.18);
+  --near: clamp(0, calc(1 - 4 * max(var(--t), -1 * var(--t))), 1);
   opacity: min(clamp(0, calc(var(--t) + 1), 1), clamp(0, calc(1 - var(--t)), 1));
+  filter: blur(calc((1 - var(--near)) * 8px));
 }
 
 /* Headings and pagination fade out at the very end of the carousel. */
@@ -443,30 +459,65 @@ body {
   object-position: center;
 }
 
+/*
+ * The headline sits around the pen, not above it. Measured at 1440x900: a
+ * full-width row centred at y = 401, the name right-aligned in the left half
+ * and the tagline left-aligned in the right half, with a 144px gutter between
+ * them that the pen stands in. 144 / 1440 = 10vw.
+ */
+.colorway-grid {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: 1fr 10vw 1fr;
+  align-items: center;
+}
+
+.colorway-name {
+  justify-self: end;
+  text-align: right;
+}
+
+.colorway-tagline {
+  justify-self: start;
+  text-align: left;
+}
+
 .colorway-name,
 .colorway-tagline {
   white-space: nowrap;
 }
 
 @media (max-width: 991px) {
+  .colorway-grid {
+    position: static;
+    display: block;
+    padding: 0 16px;
+  }
+
   .colorway-name,
   .colorway-tagline {
+    justify-self: auto;
+    text-align: center;
     white-space: normal;
   }
 }
 
 /* ---- footer ------------------------------------------------------------ */
+/* Measured on the reference at 1440: 24.05px / 600 / 27.66px line box in a
+   390px column, and nav links at 15.98px on a line-height of exactly 1. */
 .footer-tagline {
   font-family: var(--font-ui);
   font-weight: 600;
-  font-size: clamp(1rem, 1.5vw, 1.375rem);
-  line-height: 1.25;
+  font-size: clamp(1rem, 1.67vw, 1.5rem);
+  line-height: 1.15;
   letter-spacing: -0.015em;
+  max-width: 27vw;
 }
 
 .footer-nav a {
   font-weight: 600;
-  line-height: 1.45;
+  line-height: 1;
 }
 
 /* Audience items enter from the right, staggered, as on the reference. */
