@@ -35,13 +35,15 @@ export default function Specifications({ section }: { section: SpecificationsSec
           <Reveal key={group.id} delayMs={i * 110} className="bg-white p-6">
           <div>
             <h3 className="card-title">{group.title}</h3>
-            <ul className="mt-5 flex flex-col gap-3">
+            <div className="spec-card-body mt-5">
+            <ul className="flex flex-col gap-3">
               {group.items.map((item) => (
                 <li key={item.id} className="spec-item border-t border-black/10 pt-3">
                   {item.label}
                 </li>
               ))}
             </ul>
+            </div>
           </div>
           </Reveal>
         ))}
