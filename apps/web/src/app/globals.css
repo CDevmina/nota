@@ -379,3 +379,65 @@ body {
     scale: 1;
   }
 }
+
+/* ---- colourways: headline flanks a centred, full-height pen ------------ */
+.colorway-grid {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: clamp(1rem, 3vw, 3rem);
+  padding: var(--header-h) clamp(1.5rem, 4vw, 4rem) 6rem;
+}
+
+.colorway-pen {
+  max-height: 78svh;
+  justify-self: center;
+}
+
+.colorway-name {
+  text-align: right;
+}
+
+.colorway-tagline {
+  text-align: left;
+}
+
+/* Stacked on a phone: the pen above, both lines beneath it. */
+@media (max-width: 991px) {
+  .colorway-grid {
+    position: relative;
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap: 1.5rem;
+    padding: calc(var(--header-h) + 2rem) 1.5rem 4rem;
+  }
+
+  .colorway-pen {
+    max-height: 40svh;
+    order: -1;
+  }
+
+  .colorway-name,
+  .colorway-tagline {
+    text-align: center;
+  }
+}
+
+/* ---- details cards zoom through as the section scrolls ---------------- */
+/*
+ * On the reference each pill-tag card grows from a modest two-up grid until it
+ * fills the viewport, one after another. The camera clips, so the cards read as
+ * moving toward you rather than simply getting bigger in place.
+ */
+.detail-grid {
+  scale: clamp(1, calc(1 + var(--p) * 0.55), 1.55);
+  transform-origin: center center;
+}
+
+@media (max-width: 991px), (prefers-reduced-motion: reduce) {
+  .detail-grid {
+    scale: 1;
+  }
+}
