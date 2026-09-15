@@ -22,7 +22,7 @@ export default function Features({ section }: { section: FeaturesSection }) {
               </div>
 
               <div className="relative grid h-full grid-rows-[auto_1fr_auto] p-6 md:p-12">
-                <h3 className="display max-w-4xl text-balance">
+                <h3 className="display max-w-4xl">
                   <span className="block">{slide.headlineTop}</span>
                   {slide.headlineMiddle ? <span className="block">{slide.headlineMiddle}</span> : null}
                   {slide.headlineBottom ? <span className="block">{slide.headlineBottom}</span> : null}
@@ -30,7 +30,7 @@ export default function Features({ section }: { section: FeaturesSection }) {
 
                 <div aria-hidden="true" />
 
-                <div className="w-full bg-white/10 p-5 backdrop-blur-md md:ml-auto md:w-auto md:max-w-md md:p-6">
+                <div className="ml-auto max-w-md bg-white/10 p-6 backdrop-blur-md">
                   <h4 className="card-title">{slide.cardTitle}</h4>
                   <p className="spec-item mt-3 text-white/85">{slide.cardBody}</p>
                 </div>
