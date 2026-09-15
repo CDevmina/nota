@@ -257,11 +257,4 @@ implementation. Specifically:
 - Extracting the 75 hero frames from the reference's Lottie.
 - Diagnosing bugs from recordings compared frame by frame.
 
-I reviewed and directed all of it, and corrected it repeatedly — several rounds
-were spent undoing work built on a wrong reading of the reference before I had
-it measure properly rather than infer. I can explain any line in this repository
-and why it is there.
-
-**No other AI tools were used.** No site-cloning or export tools were used at
-any point: the reference's images are reused, as the brief permits, and none of
-its HTML, CSS or JavaScript is.
+I reviewed and directed all of it, and corrected it repeatedly.
