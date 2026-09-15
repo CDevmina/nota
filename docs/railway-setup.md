@@ -11,7 +11,7 @@ Railway's Postgres plugin. Exposes `DATABASE_URL`.
 
 ### 2. `cms` — Strapi 5
 - Root directory: `apps/cms`
-- **Volume mounted at `/opt/app/public/uploads`** — this is what makes uploaded
+- **Volume mounted at `/app/public/uploads`** — this is what makes uploaded
   media survive a redeploy. Mount it *before* uploading anything.
 - Public domain enabled (the admin panel has to be reachable by the reviewers).
 
@@ -21,6 +21,7 @@ Variables:
 DATABASE_CLIENT=postgres
 DATABASE_URL=${{Postgres.DATABASE_URL}}
 DATABASE_SSL=false
+NODE_OPTIONS=--max-old-space-size=2048
 APP_KEYS=<4 comma-separated random base64 strings>
 API_TOKEN_SALT=<random>
 ADMIN_JWT_SECRET=<random>

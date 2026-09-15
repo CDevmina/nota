@@ -31,7 +31,7 @@ infrastructure — are far cheaper to earn than pixel-perfect scroll animation.
 4. **`noindex` stays on.** The design belongs to UPROCK Studio. The robots meta
    and `robots.txt` disallow are required by the brief and must not be removed.
 5. **Uploaded media must survive a redeploy.** Strapi uploads live on a Railway
-   volume mounted at `/opt/app/public/uploads`. Never store uploads in the
+   volume mounted at `/app/public/uploads`. Never store uploads in the
    container filesystem or commit them to git.
 
 ## Layout
