@@ -59,18 +59,11 @@ export default function SiteFooter({ settings }: { settings: SiteSettings | null
 
       {settings.marqueeText ? (
         <div className="overflow-hidden border-t border-white/15 py-3" aria-hidden="true">
-          {/* Two identical halves: the keyframe translates by -50%, so the
-              second half is exactly where the first started and the loop has
-              no visible seam. */}
-          <div className="marquee whitespace-nowrap">
-            {Array.from({ length: 2 }).map((_, half) => (
-              <div key={half} className="flex">
-                {Array.from({ length: 10 }).map((_, i) => (
-                  <span key={i} className="label px-6 text-white/40">
-                    {settings.marqueeText}
-                  </span>
-                ))}
-              </div>
+          <div className="flex whitespace-nowrap">
+            {Array.from({ length: 12 }).map((_, i) => (
+              <span key={i} className="label px-6 text-white/40">
+                {settings.marqueeText}
+              </span>
             ))}
           </div>
         </div>

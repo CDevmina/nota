@@ -1,6 +1,5 @@
 import type { SpecificationsSection } from '@/lib/types';
 import SectionMedia from '../SectionMedia';
-import Reveal from '../Reveal';
 
 /** Split heading, rising nib render, and cards that expand into lists. */
 export default function Specifications({ section }: { section: SpecificationsSection }) {
@@ -31,9 +30,8 @@ export default function Specifications({ section }: { section: SpecificationsSec
       ) : null}
 
       <div className="mx-auto mt-16 grid max-w-6xl gap-px bg-black/10 px-6 md:grid-cols-3 md:px-12">
-        {section.groups.map((group, i) => (
-          <Reveal key={group.id} delayMs={i * 110} className="bg-white p-6">
-          <div>
+        {section.groups.map((group) => (
+          <div key={group.id} className="bg-white p-6">
             <h3 className="card-title">{group.title}</h3>
             <ul className="mt-5 flex flex-col gap-3">
               {group.items.map((item) => (
@@ -43,7 +41,6 @@ export default function Specifications({ section }: { section: SpecificationsSec
               ))}
             </ul>
           </div>
-          </Reveal>
         ))}
       </div>
     </section>
