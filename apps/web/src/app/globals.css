@@ -173,6 +173,10 @@ body {
      reproduces the measured finish points of 0.5, 0.6, 0.7, 0.8, 0.9, 1.0. */
   --travel: calc(100% - clamp(0%, (var(--p) - var(--i) * 0.1) * 200%, 100%));
   translate: 0 var(--travel);
+  /* Subpixel column widths leave 1px hairlines between the panels once they
+     land — visible on the reference too. Overlapping each panel by a pixel
+     closes them without changing the staircase. */
+  margin-right: -1px;
 }
 
 /* The dark wipe after "Works with smart paper" comes DOWN from the top edge
@@ -408,6 +412,35 @@ body {
   clip-path: polygon(
     50% 0%, 68% 32%, 100% 50%, 68% 68%, 50% 100%, 32% 68%, 0% 50%, 32% 32%
   );
+}
+
+/*
+ * Order button. The reference's is a black rectangle with a tiny radius inside
+ * the white widget, not a pill. "Nota One" is set in a mid grey; at white/50 on
+ * black it fell under WCAG AA, so it is lifted to a contrast-passing grey.
+ */
+.order-button {
+  display: inline-flex;
+  background: var(--black);
+  color: var(--white);
+  padding: 13px 18px;
+  border-radius: 4px;
+  transition: opacity 0.2s ease;
+}
+
+.order-button:hover {
+  opacity: 0.85;
+}
+
+.order-button:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+
+.order-button__product {
+  margin-left: 0.5em;
+  /* #9a9a9a on black is 6.4:1 — passes AA for this size. white/50 was 4.0:1. */
+  color: #9a9a9a;
 }
 
 /* ---- type scale corrections ------------------------------------------- */
