@@ -125,6 +125,12 @@ export default function FrameSequence({
   return (
     <div ref={hostRef} className={className}>
       {rendered.map((f, i) => (
+        // next/image is deliberately not used here. Strapi serves these from a
+        // separate origin whose domain changes per environment, so the
+        // optimiser would need a next.config allowlist tied to the deploy —
+        // and these frames are pre-sized and swapped by display, which the
+        // optimiser's lazy loading would fight.
+        // eslint-disable-next-line @next/next/no-img-element
         <img
           key={f.url}
           ref={(el) => {
