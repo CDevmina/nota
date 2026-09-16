@@ -1270,3 +1270,34 @@ body {
     bottom: 16px;
   }
 }
+
+/*
+ * The full-viewport transition heading. Held for the first screen, then faded
+ * out in place across the second — the reference never scrolls it off the top.
+ */
+.transition-heading {
+  opacity: clamp(0, calc((1 - var(--p)) * 3.33), 1);
+}
+
+@media (max-width: 991px), (prefers-reduced-motion: reduce) {
+  .transition-heading {
+    opacity: 1;
+  }
+}
+
+/*
+ * "Inside the box" heading. Fades in from very pale over the first third,
+ * holds, then rises to the top of the screen over the last third — measured on
+ * the reference, which never lets it arrive already moving.
+ */
+.inside-heading {
+  opacity: clamp(0.12, calc(var(--p) * 3.33), 1);
+  translate: 0 calc(clamp(0, calc((var(--p) - 0.66) * 3), 1) * -32svh);
+}
+
+@media (max-width: 991px), (prefers-reduced-motion: reduce) {
+  .inside-heading {
+    opacity: 1;
+    translate: none;
+  }
+}
