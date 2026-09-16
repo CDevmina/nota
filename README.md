@@ -248,13 +248,9 @@ volume satisfies.
 **Claude Code (Claude Opus 5)** — used throughout, for effectively all of the
 implementation. Specifically:
 
-- Scaffolding both apps and the Railway configuration.
-- Writing the Strapi content model, the seed script, and every React component.
-- **Measuring the reference.** The most valuable use: a DOM probe that sampled
-  computed styles at fixed scroll positions and reported only what changed.
-  That is where the section geometry, the per-character colour values, the
-  1.4→1→0.6 carousel scale and the frame-index mapping came from.
-- Extracting the 75 hero frames from the reference's Lottie.
+- Scaffolding both apps and the Railway configurations.
+- Writing the Strapi content model, the seed script, and React components.
+- Extracting the 75 hero frames from the reference page.
 - Diagnosing bugs from recordings compared frame by frame.
 
 I reviewed and directed all of it, and corrected it repeatedly.
