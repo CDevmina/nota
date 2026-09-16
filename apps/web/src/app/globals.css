@@ -171,7 +171,11 @@ body {
   background: var(--white);
   /* Column i starts at i * 0.1 of progress and takes 0.5 to arrive, which
      reproduces the measured finish points of 0.5, 0.6, 0.7, 0.8, 0.9, 1.0. */
-  --travel: calc(100% - clamp(0%, (var(--p) - var(--i) * 0.1) * 200%, 100%));
+  /* Ease-in rather than linear: the reference's columns start slowly and
+     accelerate, which is what makes the staircase read as uneven steps rather
+     than a flat diagonal ramp. */
+  --raw: clamp(0, (var(--p) - var(--i) * 0.1) * 2, 1);
+  --travel: calc(100% - var(--raw) * var(--raw) * 100%);
   translate: 0 var(--travel);
   /* Subpixel column widths leave 1px hairlines between the panels once they
      land — visible on the reference too. Overlapping each panel by a pixel
@@ -193,7 +197,7 @@ body {
      solid over the last fifth — by which point the columns have nearly
      covered anyway. Without it the *incoming* section showed through the
      staggered gaps as a grey block at the bottom right. */
-  opacity: max(clamp(0, calc(var(--p) * 0.75), 0.75), clamp(0, calc((var(--p) - 0.8) * 5), 1));
+  opacity: clamp(0, calc(var(--p) * 0.75), 0.75);
 }
 
 /* ---- circular mask: scale(0) -> scale(4.5), eased, done by p=0.8 ------ */
@@ -946,19 +950,52 @@ body {
   inset: 0;
   display: flex;
   flex-direction: column;
-  /* The tiers are black and grow over the white specifications screen. Once
-     the specs camera releases, the page ground behind this one is black and
-     they disappeared into it — so the camera carries the white itself. */
-  background: var(--white);
+  /*
+   * Transparent on purpose. The tiers are black and are drawn over the live,
+   * still-pinned specifications screen — that is the whole effect. I gave this
+   * a white background earlier to stop the tiers vanishing into the page's
+   * black ground, but the real problem was that the stage did not overlap the
+   * specs camera at all; the white then rose over the pinned content and cut
+   * the cards, the pen and the heading off from the bottom. The pull-up fixes
+   * the cause, so the white can go.
+   */
 }
 
+/*
+ * Every tier ends at the full viewport width, so the screen is solid black
+ * before the section releases — previously they capped at their own measured
+ * width and the widest never got past 54vw, leaving the corners white and a
+ * flat black edge to arrive from the next section instead.
+ *
+ * They finish widest-first: T4 at p = 0.67, T3 at 0.80, T2 at 0.95, T1 last,
+ * which is the order the reference clears its corners in. The curves are
+ * approximations of the measured samples — exact at the endpoints, close in
+ * between — using repeated multiplication rather than pow().
+ */
 .tower-tier {
-  /* Offset is largest for the top tier (i = 0), so the bottom one leads. */
-  --t: clamp(0, (var(--p) - 0.18 - (3 - var(--i)) * 0.05) / 0.6, 1);
+  --t: 0;
   align-self: center;
-  /* Squared by multiplication rather than pow(), which is too new to rely on. */
-  width: calc(var(--w) * 1vw * var(--t) * var(--t));
+  width: calc(var(--t) * 100vw);
   background: var(--black);
+}
+
+.tower-tier:nth-child(1) {
+  --r: clamp(0, var(--p), 1);
+  --t: calc(var(--r) * var(--r) * var(--r));
+}
+
+.tower-tier:nth-child(2) {
+  --r: clamp(0, var(--p) / 0.95, 1);
+  --t: calc(var(--r) * var(--r) * var(--r));
+}
+
+.tower-tier:nth-child(3) {
+  --r: clamp(0, var(--p) / 0.8, 1);
+  --t: calc(var(--r) * var(--r));
+}
+
+.tower-tier:nth-child(4) {
+  --t: clamp(0, var(--p) / 0.67, 1);
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -36,7 +36,7 @@ const TIERS = [
 export default function TowerWipe() {
   return (
     <div aria-hidden="true" className="relative">
-      <ScrollStage screens={1.8} pullUpVh={0.7}>
+      <ScrollStage screens={1.8} pullUpVh={1.8}>
         <div className="camera wipe-camera">
           <div className="tower">
             {TIERS.map((tier, i) => (
