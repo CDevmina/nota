@@ -127,7 +127,7 @@ const SECTION_POPULATE: Record<string, string[]> = {
   'sections.hero': ['media', 'frames'],
   'sections.specifications': ['media', 'groups.items'],
   'sections.manifesto': [],
-  'sections.audience': ['intro', 'items'],
+  'sections.audience': ['intro', 'items', 'media'],
   'sections.transition': [],
   'sections.features': ['slides.media'],
   'sections.inside-box': ['boxMedia', 'products.media', 'tags.media'],

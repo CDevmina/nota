@@ -3,7 +3,7 @@
   "info": {
     "displayName": "Audience",
     "icon": "user",
-    "description": "Who it's for \u2014 intro paragraphs then staggered audience blocks."
+    "description": "Who it's for — intro paragraphs then staggered audience blocks."
   },
   "options": {},
   "attributes": {
@@ -25,6 +25,12 @@
       "type": "component",
       "repeatable": true,
       "component": "audience.item"
+    },
+    "media": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.media",
+      "description": "The pen clip that grows to fill the screen after the audience list. Supply a video; the image is its poster and the still a phone sees."
     }
   }
 }

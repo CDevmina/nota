@@ -157,6 +157,14 @@ export const homepage = {
       __component: 'sections.audience',
       anchorId: 'who-its-for',
       label: "WHO IT'S FOR:",
+      // The clip the behaviour spec identified as belonging to this section —
+      // `loop: false`, parked at its end through the scrub range. It grows from
+      // half size to fill the screen as the section ends.
+      media: {
+        image: 'hero-pen-mobile.png',
+        video: 'hero-pen.mp4',
+        alt: 'The pen lying horizontally, turning slowly',
+      },
       intro: [
         {
           paragraph:

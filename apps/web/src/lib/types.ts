@@ -122,6 +122,7 @@ export interface AudienceSection extends SectionBase {
   label: string | null;
   intro: { id: number; paragraph: string }[];
   items: { id: number; title: string; body: string; indentLevel: number | null }[];
+  media: Media | null;
 }
 
 export interface TransitionSection extends SectionBase {
