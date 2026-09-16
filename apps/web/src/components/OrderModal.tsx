@@ -81,18 +81,21 @@ export default function OrderModal({
 
   return (
     <>
+      {/*
+        One black button with a small radius, not a black pill inside a white
+        one — the header widget already supplies the white box, so the extra
+        wrapper read as a thick white ring around the button.
+      */}
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className={`items-center gap-2 rounded-full bg-white px-1.5 py-1.5 text-black ${className}`}
+        className={`order-button label items-center gap-2 text-white ${className}`}
       >
-        <span className="label rounded-full bg-black px-4 py-2 text-white">
-          {cta.label}
-          {cta.productName ? (
-            <span className="ml-2 text-white/50">{cta.productName}</span>
-          ) : null}
-          {price ? <span className="ml-2">• {price}</span> : null}
-        </span>
+        {cta.label}
+        {cta.productName ? (
+          <span className="order-button__product">{cta.productName}</span>
+        ) : null}
+        {price ? <span className="ml-2">• {price}</span> : null}
       </button>
 
       {open ? (
