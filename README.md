@@ -93,13 +93,27 @@ the content lives as data in the repo and a script loads it into any Strapi
 instance:
 
 ```bash
-npm run seed -- --media ../../../assets/reference/upload
+npm run seed
 ```
 
 It is idempotent — single types are replaced wholesale and media is
 deduplicated by filename, so running it twice changes nothing. Everything it
 writes stays fully editable in the admin panel afterwards; nothing reads that
 file at runtime.
+
+**On imagery.** The reference's renders are not committed here — they are
+someone else's artwork, and a public repo is not the place to redistribute
+them. So a local seed gives you all the copy and structure with empty media
+fields, which is enough to work on the CMS or the layout. Point the script at
+a folder of images to fill them in:
+
+```bash
+npm run seed -- --media /path/to/images
+```
+
+Filenames have to match the ones in `scripts/seed/content.mjs`. The deployed
+site's media is already uploaded and lives on the Railway volume, so this only
+matters for a local copy.
 
 **4. Site** → http://localhost:3000
 
@@ -115,7 +129,7 @@ npm run dev
 ## Content model
 
 A **single type** per concern, with the page itself built from a **dynamic
-zone** rather than fixed fields. 23 components across 6 categories, 3 content
+zone** rather than fixed fields. 23 components across 7 categories, 3 content
 types.
 
 ### `homepage` (single type)
@@ -182,46 +196,43 @@ and `alt`, because the reference art-directs per breakpoint rather than scaling
 
 ## Key trade-offs
 
-**I unpacked the hero animation rather than shipping the format it came in.**
-The reference's hero is a 1.7 MB Lottie file, but there is no vector animation
-inside it — it is 75 photographs, and scrolling just picks which one to show.
-So I pulled the frames out and show them directly. Same result, smaller, no
-extra library, and the frames sit in Strapi where someone can swap them.
+The brief names four things it assesses, and with a fixed deadline they
+compete. Where they did, here is what I chose and what it cost.
 
-**The site talks to the CMS over Railway's private network, with one
-exception.** Keeping that traffic internal is the right default. But the
-machine that *builds* the site can't reach the private address, so the first
-build produced an empty page that stayed empty. It now falls back to the
-public address, which in practice only ever happens during a build.
+**I put the content model and the infrastructure first, and some of the
+animation second.** Those two are the parts a reviewer can check properly, and
+they are the parts a real team would have to live with. So the Strapi model and
+the Railway setup are finished, and a handful of the reference's smaller motion
+details are not — a couple of image sequences, and a transition or two that
+behave more simply than the original's. The page reads and scrolls correctly
+throughout; what is missing is polish, not function.
 
-**Images live on a Railway disk rather than a CDN.** For a real product I would
-use object storage with a CDN in front. For a trial project on a small budget,
-a disk does the one thing that actually matters here: uploads survive a
-redeploy.
+**I shipped without tests.** There are none, and I would rather say that than
+pad the repo with a few token ones. Given the time, I spent it on making the
+thing work and on writing down why it is built the way it is.
+
+**I did not optimise loading.** Images go out at a single size to every device,
+and I have not run Lighthouse or an accessibility audit. The site is
+statically served and fast enough to demo, but I have not measured it, so I am
+not going to claim a number.
+
+**I verified in the browser, not on hardware.** Every size was checked against
+the reference's own breakpoint, but on a desktop browser rather than a real
+phone.
 
 ---
 
 ## What I'd improve with more time
 
-The honest list, roughly in the order I would pick it up.
-
-- **Hold the sections still.** The reference keeps several sections fixed on
-  screen while their animation plays — the specifications, the manifesto, the
-  pen card. Mine scroll past while animating. It is the largest remaining
-  difference and the one I would fix first.
-- **The slide-to-slide transitions in the smart-paper carousel.** Old and new
-  text overlap for slightly too long, so you catch both at once.
-- **Try it on real phones.** I followed the reference's own breakpoint and
-  checked every size in the browser, but not on actual hardware. Safari on iOS
-  moves the address bar around while you scroll, and that is the first thing I
-  would want to see with my own eyes.
-- **Write some tests.** There are none. I would start with the two things that
-  would quietly break without anyone noticing: content publishing reaching the
-  live site, and a repeat email signup being handled gracefully.
-- **Serve smaller images.** Every hero frame is sent at one size to everyone.
-  Phones are downloading far more than they need.
-- **Run Lighthouse and an accessibility check.** I have not run either, and I
-  would rather say so than guess at the scores.
+- **Cleaner animations.** Finish the motion details that are missing or
+  simplified, and smooth the transitions that are closest to the reference but
+  not yet identical to it.
+- **UI refinements.** A pass over the remaining spacing and alignment
+  differences, and the smaller interaction states.
+- **Tests.** Starting with the two things that would break quietly: content
+  publishing reaching the live site, and a repeat email signup.
+- **Speed and loading.** Responsive image sizes, a smaller hero payload, and a
+  proper Lighthouse and accessibility pass.
 
 ---
 
