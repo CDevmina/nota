@@ -1011,3 +1011,153 @@ body {
     opacity: 1;
   }
 }
+
+/*
+ * Specification columns. Measured on the reference: the three columns span
+ * 7%-93% of the viewport with a 20px gutter, each column is a header box and a
+ * body box about 8px apart, both at a 10px radius, and each row is about 45px
+ * tall ending in a small grey dot rather than a plus.
+ */
+.spec-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  width: 86%;
+  margin: 0 auto;
+}
+
+.spec-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: none;
+}
+
+.spec-card__head,
+.spec-card__body {
+  background: #f4f4f4;
+  border-radius: 10px;
+}
+
+.spec-card__head {
+  padding: 18px 20px;
+}
+
+.spec-card__body {
+  padding: 4px 20px;
+}
+
+.spec-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 45px;
+}
+
+.spec-row + .spec-row {
+  border-top: 1px solid rgb(0 0 0 / 0.08);
+}
+
+.spec-row__dot {
+  flex: none;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgb(0 0 0 / 0.3);
+}
+
+/* The frosted middle card applies to both of its boxes. */
+.spec-card[data-frosted] .spec-card__head,
+.spec-card[data-frosted] .spec-card__body {
+  background: rgb(255 255 255 / 0.55);
+  backdrop-filter: blur(12px);
+}
+
+/*
+ * Bento card C sits against the right of its column on the reference
+ * (27%-50% of the viewport), not against the left edge.
+ */
+.detail-bento__stack > .detail-card:nth-child(2) {
+  align-self: flex-end;
+}
+
+@media (max-width: 991px) {
+  .spec-grid {
+    grid-template-columns: 1fr;
+    width: 100%;
+    gap: 12px;
+  }
+
+  .detail-bento__stack > .detail-card:nth-child(2) {
+    align-self: auto;
+  }
+}
+
+/*
+ * "Who it's for". Measured on the reference: the label shares the first line of
+ * copy; the paragraphs run on with no gap between them, the first indented
+ * ~130px and the second ~170px; and the audience list is a separate, narrower
+ * column starting at 67% with its descriptions hanging at 73%-97%.
+ */
+.audience-intro {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  align-items: start;
+}
+
+.audience-intro__copy > p[data-indent='first'] {
+  text-indent: 10.16vw;
+}
+
+.audience-intro__copy > p[data-indent='rest'] {
+  text-indent: 13.28vw;
+}
+
+.audience-list {
+  display: flex;
+  flex-direction: column;
+  gap: 3.5rem;
+  margin-top: 5rem;
+  /* 67% of the viewport, measured from the section's own 2.78vw gutter. */
+  margin-left: 64.2%;
+  width: 33%;
+}
+
+.audience-item__body {
+  /* Hanging indent: the whole description sits under the title, not just its
+     first line. 73% - 67% = 6% of the viewport. */
+  margin-left: 18.2%;
+  margin-top: 0.75rem;
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: 1.02vw;
+  line-height: 1.35;
+  letter-spacing: -0.02em;
+  color: rgb(255 255 255 / 0.9);
+}
+
+@media (max-width: 991px) {
+  .audience-intro {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .audience-intro__copy > p[data-indent='first'],
+  .audience-intro__copy > p[data-indent='rest'] {
+    text-indent: 0;
+  }
+
+  .audience-list {
+    margin-left: 0;
+    width: 100%;
+    margin-top: 2.5rem;
+    gap: 2rem;
+  }
+
+  .audience-item__body {
+    margin-left: 0;
+    font-size: 14px;
+  }
+}

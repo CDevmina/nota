@@ -33,23 +33,27 @@ export default function Specifications({ section }: { section: SpecificationsSec
             </div>
           ) : null}
 
-          <div className="relative z-10 grid gap-3 md:grid-cols-3">
+          {/*
+            Each column is two boxes on the reference, not one: a header box
+            holding only the title, and a body box under it, about 8px apart.
+            The column group spans 7%-93% of the viewport with a 20px gutter.
+          */}
+          <div className="spec-grid relative z-10">
             {section.groups.map((group, i) => (
               <div
                 key={group.id}
-                className="spec-card rounded-lg bg-[#f4f4f4] p-5"
+                className="spec-card"
                 style={{ ['--i' as string]: i }}
                 data-frosted={i === 1 ? 'true' : undefined}
               >
-                <h3 className="card-title">{group.title}</h3>
-                <ul className="mt-4 flex flex-col gap-2">
+                <div className="spec-card__head">
+                  <h3 className="card-title">{group.title}</h3>
+                </div>
+                <ul className="spec-card__body">
                   {group.items.map((item) => (
-                    <li
-                      key={item.id}
-                      className="spec-item flex items-center justify-between gap-3 border-t border-black/10 pt-2"
-                    >
+                    <li key={item.id} className="spec-item spec-row">
                       <span>{item.label}</span>
-                      <span aria-hidden="true" className="text-black/25">+</span>
+                      <span aria-hidden="true" className="spec-row__dot" />
                     </li>
                   ))}
                 </ul>
