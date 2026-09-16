@@ -10,29 +10,36 @@ export default function Audience({ section }: { section: AudienceSection }) {
       id={section.anchorId ?? undefined}
       className="bg-black px-6 pb-24 pt-[calc(var(--header-h)+4rem)] text-white md:px-10"
     >
-      {section.label ? (
-        <p className="label uppercase tracking-wide text-white/70">{section.label}</p>
-      ) : null}
-
-      <div className="mt-12 flex flex-col gap-6 md:ml-auto md:w-1/2 md:text-left">
-        {section.intro.map((p) => (
-          <p key={p.id} className="body-lead indent-[140px] text-white">
-            {p.paragraph}
-          </p>
-        ))}
+      {/*
+        The label sits on the same line as the first line of copy, and the two
+        paragraphs run on with no gap — on the reference the second one starts
+        on the very next line, with a deeper first-line indent than the first.
+      */}
+      <div className="audience-intro">
+        {section.label ? (
+          <p className="label uppercase tracking-wide text-white/70">{section.label}</p>
+        ) : null}
+        <div className="audience-intro__copy">
+          {section.intro.map((p, i) => (
+            <p key={p.id} className="body-lead text-white" data-indent={i === 0 ? 'first' : 'rest'}>
+              {p.paragraph}
+            </p>
+          ))}
+        </div>
       </div>
 
       <RevealOnEnter selector=".audience-item" />
 
-      <div className="mt-20 flex flex-col gap-14">
+      {/*
+        The list is its own, narrower column further right than the paragraphs:
+        titles start at 67% of the viewport and descriptions at 73%, hanging
+        under the title rather than indenting only their first line.
+      */}
+      <div className="audience-list">
         {section.items.map((item) => (
-          <article
-            key={item.id}
-            // The reference steps each block further right than the last.
-            className="audience-item md:ml-auto md:w-1/2"
-          >
+          <article key={item.id} className="audience-item">
             <h3 className="card-title">{item.title}</h3>
-            <p className="body-lead mt-4 indent-[75px] text-white/90">{item.body}</p>
+            <p className="audience-item__body">{item.body}</p>
           </article>
         ))}
       </div>
