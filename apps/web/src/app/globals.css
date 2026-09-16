@@ -936,7 +936,9 @@ body {
 .pen-card {
   display: grid;
   place-items: center;
-  padding: 0 2.78vw;
+  /* The audience section already carries the 2.78vw gutter; adding it again
+     here stacked two of them and left the frame at 1280 rather than 1360. */
+  padding: 0;
 }
 
 .pen-card__frame {
@@ -964,10 +966,6 @@ body {
 }
 
 @media (max-width: 991px) {
-  .pen-card {
-    padding: 0 16px;
-  }
-
   .pen-card__frame {
     height: auto;
     aspect-ratio: 16 / 9;
