@@ -1,6 +1,20 @@
+import { timingSafeEqual } from 'node:crypto';
 import { revalidateTag } from 'next/cache';
 import { NextResponse } from 'next/server';
 import { HOMEPAGE_TAG } from '@/lib/strapi';
+
+/**
+ * Constant-time string compare. `!==` returns as soon as two bytes differ,
+ * which leaks how much of the secret a caller got right; this always reads
+ * both values fully. The length is compared separately because
+ * `timingSafeEqual` throws on mismatched buffers — that much is public anyway.
+ */
+function secretMatches(given: string | null, expected: string) {
+  if (given === null) return false;
+  const a = Buffer.from(given);
+  const b = Buffer.from(expected);
+  return a.length === b.length && timingSafeEqual(a, b);
+}
 
 /**
  * Strapi webhook target.
@@ -21,7 +35,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ revalidated: false, reason: 'not configured' }, { status: 500 });
   }
 
-  if (request.headers.get('x-revalidate-secret') !== secret) {
+  if (!secretMatches(request.headers.get('x-revalidate-secret'), secret)) {
     return NextResponse.json({ revalidated: false, reason: 'bad secret' }, { status: 401 });
   }
 
