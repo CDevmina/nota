@@ -88,7 +88,7 @@ node -e "console.log([...Array(4)].map(()=>require('crypto').randomBytes(16).toS
 node -e "console.log(require('crypto').randomBytes(16).toString('base64'))"                                     # each of the others
 ```
 
-**3. Content.** Rather than typing two thousand words into the admin panel,
+**3. Content.** Rather than typing nine hundred words into the admin panel,
 the content lives as data in the repo and a script loads it into any Strapi
 instance:
 
