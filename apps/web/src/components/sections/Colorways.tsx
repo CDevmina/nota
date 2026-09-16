@@ -19,7 +19,7 @@ export default function Colorways({ section }: { section: ColorwaysSection }) {
   if (items.length === 0) return null;
 
   return (
-    <section id={section.anchorId ?? undefined} data-surface="dark">
+    <section id={section.anchorId ?? undefined} data-surface="dark" className="bg-black">
       <ScrollStage screens={3.5}>
         <div className="camera">
           {items.map((item, i) => (

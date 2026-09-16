@@ -82,7 +82,7 @@ export default function InsideBox({ section }: { section: InsideBoxSection }) {
             from="#e6e6e6"
             to="#000000"
             /* 1152px of 1440 on the reference — four lines, not five. */
-            className="mx-auto mt-24 w-[80%] text-center font-[family-name:var(--font-display)] text-[3.7vw] leading-[1.13] tracking-[-0.03em]"
+            className="mx-auto mt-24 w-[80%] text-center font-[family-name:var(--font-display)] text-[3.7vw] leading-[1.13]"
           />
         ) : null}
 

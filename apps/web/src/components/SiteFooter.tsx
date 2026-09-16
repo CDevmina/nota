@@ -70,7 +70,10 @@ export default function SiteFooter({ settings }: { settings: SiteSettings | null
             </li>
           ))}
         </ul>
-        <ul className="flex flex-wrap gap-5 md:justify-end">
+        {/* "Designed by Alice" and "& UPROCK Studio" are two links on one line in
+            the reference, separated by a single space — a list gap here read as
+            a hole between them. */}
+        <ul className="flex flex-wrap gap-[0.35em] md:justify-end">
           {settings.credits.slice(2).map((credit) => (
             <li key={credit.id}>
               <Credit credit={credit} />
