@@ -284,7 +284,7 @@ export const homepage = {
             alt: 'The metal nib and control button',
           },
         },
-        { label: 'Aluminum body', media: { image: 'tag-body.jpg', alt: 'The machined aluminium body' } },
+        { label: 'Aluminum body', media: { image: 'tag-aluminum.png', alt: 'The pen side-on, nib to the left' } },
         { media: { image: 'tag-detail-b.jpg', alt: 'The pen held upright in the hand' } },
       ],
     },

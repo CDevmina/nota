@@ -58,6 +58,14 @@ const SURFACE: Record<Section['__component'], 'light' | 'dark'> = {
   'sections.colorways': 'dark',
 };
 
+/**
+ * Where a section's *last* screen leaves the page, when that differs from the
+ * ground it opens on. Only the exceptions are listed.
+ */
+const ENDS_ON: Partial<Record<Section['__component'], 'light' | 'dark'>> = {
+  'sections.inside-box': 'dark',
+};
+
 export default function SectionRenderer({ sections }: { sections: Section[] }) {
 
   return (
@@ -79,7 +87,11 @@ export default function SectionRenderer({ sections }: { sections: Section[] }) {
         }
 
         const previous = sections[index - 1];
-        const was = previous ? SURFACE[previous.__component] : null;
+        // A section can finish on a different ground than it starts on:
+        // "Inside the box" opens white and closes on the black detail bento.
+        // Reading the start colour there put a white staircase between two
+        // black screens, which flashed.
+        const was = previous ? (ENDS_ON[previous.__component] ?? SURFACE[previous.__component]) : null;
         const now = SURFACE[section.__component];
         const entersLight = was === 'dark' && now === 'light';
         const entersDark = was === 'light' && now === 'dark';

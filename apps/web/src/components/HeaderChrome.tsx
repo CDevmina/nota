@@ -41,8 +41,15 @@ export default function HeaderChrome() {
         getComputedStyle(root).getPropertyValue('--header-h') || '96',
         10,
       );
-      const el = document.elementFromPoint(28, headerHeight / 2);
-      const surface = el?.closest<HTMLElement>('[data-surface]')?.dataset.surface;
+      // elementsFromPoint, not elementFromPoint: the header is fixed at the top,
+      // so a hit test at this point returns the header itself, which carries no
+      // `data-surface`. That read `undefined` every time and left the links
+      // white on white sections. Take the first hit that is not the header.
+      const header = root.querySelector('.site-header');
+      const behind = document
+        .elementsFromPoint(28, headerHeight / 2)
+        .find((node) => !header?.contains(node));
+      const surface = behind?.closest<HTMLElement>('[data-surface]')?.dataset.surface;
       root.classList.toggle('header-on-light', surface === 'light');
     };
 
