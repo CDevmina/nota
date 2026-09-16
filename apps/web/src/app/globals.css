@@ -887,3 +887,75 @@ body {
     display: none;
   }
 }
+
+/*
+ * Pen card — the clip that grows to fill the screen at the end of "Who it's
+ * for" (`who__video-camera` on the reference).
+ *
+ * The frame is a fixed 1360 x 900 box (94vw, one viewport tall) and the video
+ * inside it is what moves. Three straight segments reproduce the measured
+ * curve: held at 0.5 until p = 0.4, growing to ~1 by 0.85, then easing back
+ * and fading as the next section's curtain takes over.
+ *
+ *   --grow   0 until p = 0.4, then 0 -> 1 across 0.4 -> 0.85
+ *   --settle 0 until p = 0.85, then 0 -> 1 across 0.85 -> 1
+ */
+.pen-card {
+  display: grid;
+  place-items: center;
+  padding: 0 2.78vw;
+}
+
+.pen-card__frame {
+  position: relative;
+  width: 100%;
+  height: 100svh;
+  overflow: hidden;
+}
+
+.pen-card__media,
+.pen-card picture,
+.pen-card picture img,
+.pen-card video {
+  --grow: clamp(0, calc((var(--p) - 0.4) / 0.45), 1);
+  --settle: clamp(0, calc((var(--p) - 0.85) / 0.15), 1);
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: translateY(calc(-83.7px + var(--grow) * 85.6px + var(--settle) * 25.4px))
+    scale(calc(0.5 + var(--grow) * 0.4927 - var(--settle) * 0.0971));
+  opacity: calc(1 - var(--settle) * 0.26);
+  will-change: transform, opacity;
+}
+
+@media (max-width: 991px) {
+  .pen-card {
+    padding: 0 16px;
+  }
+
+  .pen-card__frame {
+    height: auto;
+    aspect-ratio: 16 / 9;
+  }
+
+  /* No camera below 992px on the reference, so the clip simply sits there. */
+  .pen-card__media,
+  .pen-card picture,
+  .pen-card picture img,
+  .pen-card video {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pen-card__media,
+  .pen-card picture,
+  .pen-card picture img,
+  .pen-card video {
+    transform: none;
+    opacity: 1;
+  }
+}

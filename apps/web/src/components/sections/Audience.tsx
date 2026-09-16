@@ -1,5 +1,6 @@
 import type { AudienceSection } from '@/lib/types';
 import RevealOnEnter from '../motion/RevealOnEnter';
+import PenCard from '../motion/PenCard';
 
 /** Who it's for — intro paragraphs, then blocks each indented further right. */
 export default function Audience({ section }: { section: AudienceSection }) {
@@ -35,6 +36,8 @@ export default function Audience({ section }: { section: AudienceSection }) {
           </article>
         ))}
       </div>
+
+      <PenCard media={section.media} />
     </section>
   );
 }
