@@ -182,64 +182,68 @@ and `alt`, because the reference art-directs per breakpoint rather than scaling
 
 ## Key trade-offs
 
-**A seed script instead of hand-entering content.** Typing the copy into the
-admin panel is slow, unrepeatable, and lost the moment the database is reset.
-As data in the repo it is reviewable as a diff and survives a wipe. The cost is
-one more moving part; the benefit is that a fresh environment is one command
-away. It seeds an initial state only — nothing reads it at runtime.
+**I put the content in a script instead of typing it into the admin panel.**
+There are about two thousand words here. Typing them in by hand takes an hour,
+and you lose all of it the first time the database gets reset. Keeping it as a
+file in the repo means a fresh environment is one command away, and any change
+to the copy shows up in a pull request like any other change. The cost is one
+more thing in the repo to understand. It only ever sets a starting point —
+once it has run, everything is edited in Strapi like normal, and nothing reads
+that file while the site is running.
 
-**CSS sticky "cameras" rather than ScrollTrigger pinning.** I assumed the
-reference pinned with GSAP and built it that way first. It does not:
-`ScrollTrigger.getAll()` returns 0 at every scroll depth, and all fifteen of its
-scroll effects are `position: sticky` containers inside taller sections with
-negative top margins. Rebuilding to match removed a whole class of iOS
-viewport-unit bugs, since there is no pin-spacer. GSAP still earns its place for
-the scramble reveal.
+**I built the scroll effects the way the reference actually builds them, not
+the way I assumed.** I assumed GSAP was pinning the sections, built it that
+way, and was wrong — the reference has no pins at all. Every effect is a plain
+CSS sticky element inside a taller section. Rebuilding to match cost me time,
+but it made the whole thing simpler and removed the class of viewport bugs
+that pinning causes on iOS.
 
-**Every effect is a continuous function of scroll, with no transitions.** My
-first attempt stepped between carousel slides and ran a timed CSS transition,
-which lurched because the motion was detached from the wheel. Sampling the
-reference mid-scroll showed intermediate values — those are functions of scroll
-position, not transition midpoints. Opacity and scale are now computed from
-progress directly, so motion tracks the wheel and reverses exactly.
+**Nothing is on a timer.** My first version stepped from one carousel slide to
+the next and let a CSS transition play it out. It felt wrong — you scroll, and
+the animation carries on by itself for a moment afterwards. Everything now
+reads straight off the scroll position, so it tracks your wheel exactly and
+runs backwards just as smoothly.
 
-**The hero as an image sequence rather than Lottie.** The reference's hero is a
-1.7 MB Lottie containing 75 embedded WebP frames — an image sequence in a
-wrapper, always paused, with scroll setting the frame index. I extracted the
-frames, uploaded them to Strapi as an editable `frames` field, and scrub them
-directly. Same motion, 1.25 MB, no Lottie runtime, and the sequence stays
-editable like any other image.
+**I unpacked the hero animation rather than shipping the format it came in.**
+The reference's hero is a 1.7 MB Lottie file, but there is no vector animation
+inside it — it is 75 photographs, and scrolling just picks which one to show.
+So I pulled the frames out and show them directly. Same result, smaller, no
+extra library, and the frames sit in Strapi where someone can swap them.
 
-**The private network, with a public fallback.** Reads prefer
-`cms.railway.internal` so CMS traffic never leaves the project. But Railway's
-*builder* cannot reach that address, so a build-time fetch always failed and
-Next prerendered an empty page that stayed empty until a webhook rescued it.
-Reads now fall back to the public domain, which only ever happens at build time.
+**The site talks to the CMS over Railway's private network, with one
+exception.** Keeping that traffic internal is the right default. But the
+machine that *builds* the site can't reach the private address, so the first
+build produced an empty page that stayed empty. It now falls back to the
+public address, which in practice only ever happens during a build.
 
-**Media on a Railway volume rather than a CDN.** Object storage with a CDN in
-front would be the production answer. A volume is what fits the trial budget,
-and the brief's actual requirement is that uploads survive a redeploy, which a
-volume satisfies.
+**Images live on a Railway disk rather than a CDN.** For a real product I would
+use object storage with a CDN in front. For a trial project on a small budget,
+a disk does the one thing that actually matters here: uploads survive a
+redeploy.
 
 ---
 
 ## What I'd improve with more time
 
-- **The audience section's scrubbed video.** The reference plays a clip there,
-  scrolled rather than played. The asset is uploaded but not yet wired to that
-  section — it needs a media field on the audience component.
-- **Finish the remaining motion detail.** The pill-tag cards zoom further than
-  ours do, and a few easing curves are approximations of the measured values
-  rather than exact matches.
-- **Real-device testing.** The responsive work follows the reference's own
-  992px breakpoint and its collapse to a static mobile layout, but I verified it
-  through emulation, not on hardware. `100svh` under iOS Safari's collapsing
-  chrome is the thing I would check first.
-- **Tests.** There are none. The revalidation contract and the subscribe route's
-  duplicate-email handling are the two places I would start.
-- **Image pipeline.** Frames are served at a single size; responsive `srcset`
-  and AVIF would cut the hero's payload substantially.
-- **Lighthouse and axe passes.** Neither has been run.
+The honest list, roughly in the order I would pick it up.
+
+- **Hold the sections still.** The reference keeps several sections fixed on
+  screen while their animation plays — the specifications, the manifesto, the
+  pen card. Mine scroll past while animating. It is the largest remaining
+  difference and the one I would fix first.
+- **The slide-to-slide transitions in the smart-paper carousel.** Old and new
+  text overlap for slightly too long, so you catch both at once.
+- **Try it on real phones.** I followed the reference's own breakpoint and
+  checked every size in the browser, but not on actual hardware. Safari on iOS
+  moves the address bar around while you scroll, and that is the first thing I
+  would want to see with my own eyes.
+- **Write some tests.** There are none. I would start with the two things that
+  would quietly break without anyone noticing: content publishing reaching the
+  live site, and a repeat email signup being handled gracefully.
+- **Serve smaller images.** Every hero frame is sent at one size to everyone.
+  Phones are downloading far more than they need.
+- **Run Lighthouse and an accessibility check.** I have not run either, and I
+  would rather say so than guess at the scores.
 
 ---
 
