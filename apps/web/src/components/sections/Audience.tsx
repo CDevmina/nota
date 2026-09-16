@@ -8,7 +8,7 @@ export default function Audience({ section }: { section: AudienceSection }) {
     <section
       data-surface="dark"
       id={section.anchorId ?? undefined}
-      className="bg-black px-6 pb-24 pt-[calc(var(--header-h)+4rem)] text-white md:px-10"
+      className="audience-section bg-black px-6 pb-24 pt-[calc(var(--header-h)+4rem)] text-white md:px-10"
     >
       {/*
         The label sits on the same line as the first line of copy, and the two

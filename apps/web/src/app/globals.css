@@ -561,6 +561,19 @@ body {
 }
 
 /* Audience items enter from the right, staggered, as on the reference. */
+/*
+ * The items start 120px to the right and slide in. That pushes them past the
+ * viewport edge, which gave the whole document a horizontal scrollbar
+ * (1517px against a 1440px viewport) — so the section clips.
+ *
+ * `clip`, not `hidden`: `overflow: hidden` on an ancestor turns it into a
+ * scroll container and kills `position: sticky` inside it, and this section
+ * contains the pen card's sticky camera.
+ */
+.audience-section {
+  overflow-x: clip;
+}
+
 .audience-item {
   opacity: 0;
   translate: 120px 0;
