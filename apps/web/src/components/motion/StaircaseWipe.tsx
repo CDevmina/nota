@@ -13,6 +13,12 @@ import ScrollStage from '../ScrollStage';
  * hand over from the white transition into the dark slider. The dark variant is
  * pulled up 0.7 of a viewport rather than a full one, as measured.
  *
+ * The light variant is pulled up 1.8 viewports, not 1. At 1 its travel began
+ * exactly where the hero's camera released, so the pen and headline scrolled
+ * away underneath the rising columns instead of holding still, and the gap
+ * uncovered the section below as a grey block. At 1.8 the columns finish on
+ * the same frame the hero releases.
+ *
  * `direction` is which way the columns travel. The white staircase sweeps up
  * from the bottom edge; the dark one that follows "Works with smart paper"
  * wipes DOWN from the top, which is the opposite of what we had.
@@ -28,7 +34,7 @@ export default function StaircaseWipe({
 }) {
   return (
     <div aria-hidden="true" className="relative">
-      <ScrollStage screens={1.8} pullUpVh={tone === 'dark' ? 0.7 : 1}>
+      <ScrollStage screens={1.8} pullUpVh={tone === 'dark' ? 0.7 : 1.8}>
         <div className="camera wipe-camera">
           {tone === 'light' ? <div className="stair-dim" /> : null}
           <div className="stair" data-tone={tone} data-direction={direction}>
