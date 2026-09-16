@@ -1022,7 +1022,9 @@ body {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
-  width: 86%;
+  /* vw, not %: the section's own padding made a percentage land at 10%-90%
+     rather than the measured 7%-93%. */
+  width: 86vw;
   margin: 0 auto;
 }
 
@@ -1120,15 +1122,20 @@ body {
   flex-direction: column;
   gap: 3.5rem;
   margin-top: 5rem;
-  /* 67% of the viewport, measured from the section's own 2.78vw gutter. */
-  margin-left: 64.2%;
-  width: 33%;
+  /*
+   * Measured against the viewport, so the section's 2.78vw gutter does not
+   * shift them: titles start at 67vw and the column ends at 97vw. As
+   * percentages of the padded parent this ran to 103% and overflowed.
+   */
+  margin-left: calc(67vw - 2.78vw);
+  width: 30vw;
 }
 
 .audience-item__body {
   /* Hanging indent: the whole description sits under the title, not just its
-     first line. 73% - 67% = 6% of the viewport. */
-  margin-left: 18.2%;
+     first line. Descriptions run 73vw to 97vw. */
+  margin-left: 6vw;
+  width: 24vw;
   margin-top: 0.75rem;
   font-family: var(--font-ui);
   font-weight: 500;
