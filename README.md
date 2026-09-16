@@ -182,28 +182,6 @@ and `alt`, because the reference art-directs per breakpoint rather than scaling
 
 ## Key trade-offs
 
-**I put the content in a script instead of typing it into the admin panel.**
-There are about two thousand words here. Typing them in by hand takes an hour,
-and you lose all of it the first time the database gets reset. Keeping it as a
-file in the repo means a fresh environment is one command away, and any change
-to the copy shows up in a pull request like any other change. The cost is one
-more thing in the repo to understand. It only ever sets a starting point —
-once it has run, everything is edited in Strapi like normal, and nothing reads
-that file while the site is running.
-
-**I built the scroll effects the way the reference actually builds them, not
-the way I assumed.** I assumed GSAP was pinning the sections, built it that
-way, and was wrong — the reference has no pins at all. Every effect is a plain
-CSS sticky element inside a taller section. Rebuilding to match cost me time,
-but it made the whole thing simpler and removed the class of viewport bugs
-that pinning causes on iOS.
-
-**Nothing is on a timer.** My first version stepped from one carousel slide to
-the next and let a CSS transition play it out. It felt wrong — you scroll, and
-the animation carries on by itself for a moment afterwards. Everything now
-reads straight off the scroll position, so it tracks your wheel exactly and
-runs backwards just as smoothly.
-
 **I unpacked the hero animation rather than shipping the format it came in.**
 The reference's hero is a 1.7 MB Lottie file, but there is no vector animation
 inside it — it is 75 photographs, and scrolling just picks which one to show.
