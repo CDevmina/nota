@@ -249,8 +249,7 @@ The honest list, roughly in the order I would pick it up.
 
 ## AI tools used
 
-**Claude Code (Claude Opus 5)** — used throughout, for effectively all of the
-implementation. Specifically:
+**Claude Code (Claude Opus 5)** — used throughout, Specifically:
 
 - Scaffolding both apps and the Railway configurations.
 - Writing the Strapi content model, the seed script, and React components.
