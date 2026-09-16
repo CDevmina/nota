@@ -3,6 +3,7 @@ import SectionMedia from '../SectionMedia';
 import ScrubReveal from '../motion/ScrubReveal';
 import BlindReveal from '../motion/BlindReveal';
 import DetailBento from '../DetailBento';
+import ScrollStage from '../ScrollStage';
 
 /**
  * Split heading, the box render, the long serif paragraph, the two product
@@ -55,18 +56,28 @@ export default function InsideBox({ section }: { section: InsideBoxSection }) {
       id={section.anchorId ?? undefined}
       className="bg-white text-black"
     >
-      <div className="inside-column">
-        <h2 className="display-lg text-center">
-          {section.titleTop ? (
-            <span className="block" style={{ color: 'var(--muted-light)' }}>
-              {section.titleTop}
-            </span>
-          ) : null}
-          <span className="block">{section.titleBottom}</span>
-        </h2>
+      {/*
+        The heading is pinned on the reference: it fades in from very pale,
+        centred, holds, and only then travels up to the top of the screen.
+        Ours arrived at full contrast already sliding past, and the blinds
+        below started while it was still mid-screen.
+      */}
+      <ScrollStage screens={2}>
+        <div className="camera inside-heading-camera grid place-items-center px-6 md:px-12">
+          <h2 className="display-lg inside-heading w-full text-center">
+            {section.titleTop ? (
+              <span className="block" style={{ color: 'var(--muted-light)' }}>
+                {section.titleTop}
+              </span>
+            ) : null}
+            <span className="block">{section.titleBottom}</span>
+          </h2>
+        </div>
+      </ScrollStage>
 
+      <div className="inside-column">
         {section.boxMedia?.image ? (
-          <div className="mt-16">
+          <div>
             <Panel
               media={section.boxMedia}
               title={section.subtitle}
