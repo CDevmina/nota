@@ -28,11 +28,11 @@ export default function Features({ section }: { section: FeaturesSection }) {
               <div className="absolute inset-0 overflow-hidden">
                 <SectionMedia
                   media={slide.media}
-                  className="slide-media h-full w-full object-cover opacity-80"
+                  className="slide-media h-full w-full object-cover"
                 />
               </div>
 
-              <div className="stage-fade-out relative grid h-full grid-rows-[auto_1fr_auto] px-6 pb-16 pt-[calc(var(--header-h)+2rem)] md:px-12">
+              <div className="stage-fade-out slide-content grid h-full grid-rows-[auto_1fr_auto] px-6 pb-16 pt-[1.9vw] md:px-12">
                 <h3 className="display-mid max-w-[34%] text-balance">
                   <span className="block">{slide.headlineTop}</span>
                   {slide.headlineMiddle ? <span className="block">{slide.headlineMiddle}</span> : null}
@@ -41,9 +41,15 @@ export default function Features({ section }: { section: FeaturesSection }) {
 
                 <div aria-hidden="true" />
 
-                <div className="w-full bg-white/10 p-5 backdrop-blur-md md:ml-auto md:w-auto md:max-w-md md:p-6">
-                  <h4 className="card-title">{slide.cardTitle}</h4>
-                  <p className="spec-item mt-3 text-white/85">{slide.cardBody}</p>
+                {/* Two boxes, ~6px apart, as on the reference — not one card
+                    with the title and body sharing a background. */}
+                <div className="slide-card md:ml-auto">
+                  <div className="slide-card__head">
+                    <h4 className="card-title">{slide.cardTitle}</h4>
+                  </div>
+                  <div className="slide-card__body">
+                    <p className="spec-item text-white/85">{slide.cardBody}</p>
+                  </div>
                 </div>
               </div>
             </article>
@@ -51,7 +57,7 @@ export default function Features({ section }: { section: FeaturesSection }) {
 
           <div
             aria-hidden="true"
-            className="stage-fade-out pointer-events-none absolute inset-x-0 bottom-6 flex justify-center gap-2 text-white"
+            className="stage-fade-out slide-pager pointer-events-none absolute text-white"
           >
             {slides.map((s, i) => (
               <span

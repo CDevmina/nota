@@ -35,13 +35,23 @@ export default function BlindReveal({
     const still = window.matchMedia('(prefers-reduced-motion: reduce)');
     let frame = 0;
 
+    // The caption is a sibling of the frame these slats live in, so it cannot
+    // inherit `--p` from here. Publish the same value on the panel that
+    // contains both, and the caption can hold off until the image is solid.
+    const panel = el.closest<HTMLElement>('.inside-panel');
+
+    const write = (p: number) => {
+      const v = p.toFixed(4);
+      el.style.setProperty('--p', v);
+      panel?.style.setProperty('--blind-p', v);
+    };
+
     const update = () => {
       frame = 0;
       const rect = el.getBoundingClientRect();
       const start = window.innerHeight;
       const end = window.innerHeight * 0.35;
-      const p = Math.min(Math.max((start - rect.top) / (start - end), 0), 1);
-      el.style.setProperty('--p', p.toFixed(4));
+      write(Math.min(Math.max((start - rect.top) / (start - end), 0), 1));
     };
 
     const onScroll = () => {
@@ -52,7 +62,7 @@ export default function BlindReveal({
     const apply = () => {
       window.removeEventListener('scroll', onScroll);
       if (!desktop.matches || still.matches) {
-        el.style.setProperty('--p', '1');
+        write(1);
         return;
       }
       window.addEventListener('scroll', onScroll, { passive: true });

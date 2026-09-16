@@ -189,7 +189,11 @@ body {
   position: absolute;
   inset: 0;
   background: var(--black);
-  opacity: clamp(0, calc(var(--p) * 0.75), 0.75);
+  /* Reaches 0.75 as the reference does, then goes the rest of the way to
+     solid over the last fifth — by which point the columns have nearly
+     covered anyway. Without it the *incoming* section showed through the
+     staggered gaps as a grey block at the bottom right. */
+  opacity: max(clamp(0, calc(var(--p) * 0.75), 0.75), clamp(0, calc((var(--p) - 0.8) * 5), 1));
 }
 
 /* ---- circular mask: scale(0) -> scale(4.5), eased, done by p=0.8 ------ */
@@ -265,7 +269,12 @@ body {
    * gradients blend rather than cross over. That blend is what put a purple
    * frame between Mist Blue and Precision Red.
    */
-  opacity: clamp(0, calc(var(--t) + 1), 1);
+  /*
+   * The fade runs over the last quarter of a step rather than the whole step.
+   * A full step left two slides part-visible for most of the scroll, which is
+   * what read as the carousel never settling on one image.
+   */
+  opacity: clamp(0, calc((var(--t) + 0.25) * 4), 1);
   will-change: opacity;
 }
 
@@ -827,11 +836,14 @@ body {
   object-fit: cover;
 }
 
+/* The caption appears only once the image is solid. It was readable the whole
+   time the stripes were still running, which the reference never does. */
 .inside-panel__caption {
   position: absolute;
   top: 1.39vw;
   right: 1.39vw;
   width: 25vw;
+  opacity: clamp(0, calc((var(--blind-p, 1) - 0.85) * 6.67), 1);
 }
 
 .inside-panel__body {
@@ -1179,5 +1191,82 @@ body {
   .audience-item__body {
     margin-left: 0;
     font-size: 14px;
+  }
+}
+
+/* ======================================================================
+   Smart-paper carousel
+   ====================================================================== */
+
+/*
+ * An opaque ground under every slide. The media carried `opacity-80` to darken
+ * it, which meant you saw straight through to the slide underneath — that is
+ * the ghost notebook behind the notebook, and the leftover ends of the previous
+ * title. The darkening is a filter on the image now, so the slide itself stays
+ * solid and the incoming one genuinely covers the outgoing one.
+ *
+ * Colourways sets `background` inline on its own slides, which wins over this.
+ */
+.slide {
+  background: #101010;
+}
+
+.slide .slide-media {
+  filter: brightness(0.8);
+}
+
+/* Text above the zooming image, always. */
+.slide-content {
+  position: relative;
+  z-index: 2;
+}
+
+/*
+ * The info card is two boxes about 6px apart at a 10px radius, on a dark
+ * ground — measured ~28% of the viewport wide, sitting ~30px off the bottom.
+ */
+.slide-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 28vw;
+  margin-bottom: 0.7vw;
+}
+
+.slide-card__head,
+.slide-card__body {
+  background: rgb(27 27 27 / 0.92);
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
+  padding: 16px 20px;
+}
+
+/*
+ * Pagination: five long, thin segments spanning 33%-67% of the width under the
+ * image, with only a slightly brighter active one. Ours were 32px stubs
+ * centred at 50% with a hard white highlight.
+ */
+.slide-pager {
+  left: 33vw;
+  right: 33vw;
+  bottom: 2.1vw;
+  display: flex;
+  gap: 3px;
+}
+
+.slide-pager .seg {
+  flex: 1;
+}
+
+@media (max-width: 991px) {
+  .slide-card {
+    width: 100%;
+    margin-bottom: 0;
+  }
+
+  .slide-pager {
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
   }
 }
